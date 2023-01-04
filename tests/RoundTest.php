@@ -24,13 +24,13 @@ final class RoundTest extends TestCase
         $round = new Round();
 
         {
-            # On s'attend à une exception de type InvalidArgumentException
+            // On s'attend à une exception de type InvalidArgumentException
             $this->expectException(InvalidArgumentException::class);
             $round->setFirstThrow(-1);
         }
 
         {
-            # Idem, mais à la borne supérieure autorisée
+            // Idem, mais à la borne supérieure autorisée
             $this->expectException(InvalidArgumentException::class);
             $round->setFirstThrow(11);
         }
