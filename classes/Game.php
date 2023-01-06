@@ -1,8 +1,4 @@
 <?php
-require_once "classes/Player.php";
-
-require_once "Player.php";
-require "Round.php";
 
 class Game
 {

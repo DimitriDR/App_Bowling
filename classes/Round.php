@@ -1,8 +1,5 @@
 <?php
 
-require "Player.php";
-require "Game.php";
-
 class Round
 {
     /**
@@ -42,12 +39,12 @@ class Round
             throw new InvalidArgumentException("Le numéro de tour doit être compris entre 1 et 10");
         }
 
-        if ($round_data . length() > 2 && $turn != 10)
+        if (count($round_data) > 2 && $turn != 10)
         {
             throw new InvalidArgumentException("Le tableau contient plus de 2 valeurs pour un tour différent du 10");
         }
 
-        if ($round_data . length() > 3 && $turn == 10)
+        if (count($round_data) > 3 && $turn == 10)
         {
             throw new InvalidArgumentException("Le tableau contient plus de 3 valeurs pour le tour 10");
         }
