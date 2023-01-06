@@ -76,7 +76,7 @@ class Player
     }
 
     /**
-     * @return int Nombre de points marqués par le joueur
+     * @return int Nombre de points marqués par le  joueur
      */
     public function count_marked_points(): int
     {

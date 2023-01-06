@@ -95,7 +95,7 @@ class Game
     /**
      * Fonction pour récupérer un objet Player à un emplacement du tableau via $id
      * @param int $id Joueur à récupérer
-     * @return Player Joueur trouvé
+     * @return Player Joueur  trouvé
      * @throws InvalidArgumentException Si $id dépasse les bornes du tableau
     **/
     public function get_player_at(int $id): Player

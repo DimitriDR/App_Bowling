@@ -180,6 +180,7 @@ class Round
     public function getScore(): array
     {
         return [$this->first_throw, $this->second_throw];
+        
     }
 
     /**
