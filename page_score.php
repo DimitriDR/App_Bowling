@@ -9,7 +9,9 @@
         <body>
         
         <div class="login-form">
-            <?php 
+            <?php
+            session_start(); 
+ 
                 if(isset($_GET['error']))
                 {
                     $error = htmlspecialchars($_GET['error']);
@@ -54,6 +56,25 @@
                         </div>
                     <?php
                 }
+
+                include "classes/Player.php"; 
+                include "classes/Game.php";
+                include "indextraitement.php";
+                require_once ("indextraitement.php");
+
+                //echo '<h2 class="text-center">Tour n° 1</h2>'; //a changer en fonction du tour
+
+                //ajout des joueurs dans une partie
+                $game= new Game([]);
+                for ($i=1; $i <= unserialize($_SESSION['number']); $i++) {
+                    $player= new Player(htmlspecialchars($_GET['player'.$i]));
+                    $game->add_player($player);
+                }
+                // serialize et lina va unserialize
+                //echo $game->get_player_at(0)->name;
+                $_SESSION['game'] = serialize($game);
+                // print_r($game); pour afficher le tableau
+
             ?>
              
             <form action="enregistrerscore.php" method="post">
