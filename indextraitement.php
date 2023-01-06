@@ -1,6 +1,7 @@
 
 <?php
 
+
     if(isset($_GET['playersnumber'])){
         $playersnumber = $_GET['playersnumber'];
         if(ctype_digit($playersnumber) == false)
@@ -22,12 +23,15 @@
                 echo '<div class="login-form">
                     <form action="page_score.php" method="GET">
                         <h2 class="text-center">Indiquer le nom des joueurs</h2>';
-
+                        $playerslist = array();
+                        $number=$playersnumber;
+                        $_SESSION['number'] = serialize($number);
                         for($i = 1; $i <= $playersnumber; $i++)
                         {
                             echo'<div class="form-group">
                             <input type="text" name="player'.$i.'" class="form-control" placeholder="Nom du joueur '.$i.'" required="required" autocomplete="off"><br>
                             </div>';
+                            $playerslist[] = 'player'.$i;
                         }
                         echo '<div class="form-group">
                         <button type="submit" class="btn btn-warning btn-block" name="ChoiceName">Commencer la partie</button>
@@ -58,6 +62,9 @@
                     font-weight: bold;
                 }
                 </style>';
+               
+                
+                
             }
         }
     }
