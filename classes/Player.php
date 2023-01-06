@@ -5,21 +5,23 @@ class Player
 {
     /**
      * @var string Nom du joueur
-     */
+    **/
     public string $name;
+
     /**
      * @var int Score du joueur
-     */
+    **/
     private int $score;
+
     /**
      * @var array Tableau de 10 objets Round : points remportés par le joueur
-     */
+    **/
     private array $marked_points;
 
     /**
      * Constructeur de la classe Player
      * @param string $name Nom du joueur
-     */
+    **/
     public function __construct(string $name)
     {
         $this->name = $name;
@@ -35,7 +37,8 @@ class Player
      */
     public function add_score(int $score): void
     {
-        if ($score < 0) {
+        if ($score < 0)
+        {
             throw new InvalidArgumentException("Le score ne peut pas être négatif");
         }
 

@@ -12,8 +12,8 @@ class Round
     private int $second_throw;
 
     /**
-     * Assesseur pour avoir le premier lancer
-     * @return int
+     * Assesseur pour avoir la valeur du premier lancer
+     * @return int Valeur du premier lancer
      */
     public function getFirstThrow(): int
     {
@@ -22,21 +22,22 @@ class Round
 
     /**
      * Mutateur pour le premier lancer
-     * @param int $throw_value Valeur du premier lancer
-     * @throws InvalidArgumentException
+     * @param int $throw_value Valeur du premier lancer comprises en 0 et 10
+     * @throws InvalidArgumentException Exception levée si la valeur du lancer n'est pas comprise dans l'intervalle [0, 10]
      */
     public function setFirstThrow(int $throw_value): void
     {
-        if ($throw_value < 0 || $throw_value > 10) {
-            throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et 10");
+        if ($throw_value < 0 || $throw_value > 10)
+        {
+            throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et 10 inclus");
         }
 
         $this->first_throw = $throw_value;
     }
 
     /**
-     * Assesseur pour avoir le second lancer
-     * @return int
+     * Assesseur pour avoir la valeur du second lancer
+     * @return int Valeur du second lancer
      */
     public function getSecondThrow(): int
     {
@@ -45,15 +46,16 @@ class Round
 
     /**
      * Mutateur pour le second lancer
-     * @param int $second_throw
-     * @throws InvalidArgumentException
+     * @param int $throw_value Valeur du second lancer comprises en 0 et 10
+     * @throws InvalidArgumentException Exception levée si la valeur du lancer n'est pas comprise dans l'intervalle [0, 10]
      */
-    public function setSecondThrow(int $second_throw): void
+    public function setSecondThrow(int $throw_value): void
     {
-        if ($second_throw < 0 || $second_throw > 10) {
+        if ($throw_value < 0 || $throw_value > 10)
+        {
             throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et 10");
         }
 
-        $this->second_throw = $second_throw;
+        $this->second_throw = $throw_value;
     }
 }

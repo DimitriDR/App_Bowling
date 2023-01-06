@@ -49,4 +49,27 @@ class GameTest extends TestCase
             $this->assertEquals($player_3, $game->get_player_at(2));
         }
     }
+
+    public function testGameWithoutPlayer()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new Game([]);
+    }
+
+    public function testGameWithPlayerButItIsEmpty()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new Game([]);
+
+        $this->expectException(InvalidArgumentException::class);
+        new Game([null]);
+    }
+
+    public function testCreatingNewGameWithPlayerButItIsNot()
+    {
+        $round = new Round();
+        $this->expectException(InvalidArgumentException::class);
+        new Game([$round]);
+    }
+
 }
