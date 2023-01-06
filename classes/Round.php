@@ -1,9 +1,9 @@
 <?php
 
-require 'Players.php';
-require 'Game.php';
+require "Player.php";
+require "Game.php";
 
-class Round 
+class Round
 {
     /**
      * @var int Valeur du premier lancer
@@ -37,21 +37,22 @@ class Round
      */
     public function __construct(array $round_data, int $turn)
     {
-        if ($turn < 1 || $turn > 10) {
+        if ($turn < 1 || $turn > 10)
+        {
             throw new InvalidArgumentException("Le numéro de tour doit être compris entre 1 et 10");
         }
 
-        if($round_data.length() > 2 && $turn != 10)
+        if ($round_data . length() > 2 && $turn != 10)
         {
             throw new InvalidArgumentException("Le tableau contient plus de 2 valeurs pour un tour différent du 10");
         }
 
-        if($round_data.length() > 3 && $turn == 10)
+        if ($round_data . length() > 3 && $turn == 10)
         {
             throw new InvalidArgumentException("Le tableau contient plus de 3 valeurs pour le tour 10");
         }
 
-        if($turn == 10)
+        if ($turn == 10)
         {
             $this->third_throw = $round_data[2];
         }
@@ -77,7 +78,8 @@ class Round
      */
     public function setFirstThrow(int $throw_value): void
     {
-        if ($throw_value < 0 || $throw_value > 10) {
+        if ($throw_value < 0 || $throw_value > 10)
+        {
             throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et 10");
         }
 
@@ -100,16 +102,17 @@ class Round
      */
     public function setSecondThrow(int $second_throw): void
     {
-        if ($second_throw < 0 || $second_throw > 10) {
+        if ($second_throw < 0 || $second_throw > 10)
+        {
             throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et 10");
         }
 
-        if($this->first_throw + $second_throw > 10)
+        if ($this->first_throw + $second_throw > 10)
         {
             throw new InvalidArgumentException("La somme des deux lancers ne peut pas être supérieure à 10");
         }
 
-        if($this->first_throw == 10)
+        if ($this->first_throw == 10)
         {
             throw new InvalidArgumentException("Le joueur a fait un strike, il n'a pas le droit au second lancer");
         }
@@ -132,17 +135,18 @@ class Round
      * @throws InvalidArgumentException
      */
     public function setThirdThrow(int $third_throw): void
-    {   
-        if ($third_throw < 0 || $third_throw > 10) {
+    {
+        if ($third_throw < 0 || $third_throw > 10)
+        {
             throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et 10");
         }
 
-        if($this->turn != 10)
+        if ($this->turn != 10)
         {
             throw new InvalidArgumentException("Le troisième lancer n'est utilisé que pour le dernier tour");
         }
 
-        if($this->first_throw + $this->second_throw < 10)
+        if ($this->first_throw + $this->second_throw < 10)
         {
             throw new InvalidArgumentException("Le troisième lancer n'est utilisé que si le joueur fait un strike ou un spare");
         }
@@ -156,7 +160,8 @@ class Round
      */
     public function isStrike(): bool
     {
-        if($this->first_throw === 10){
+        if ($this->first_throw === 10)
+        {
             $this->setSecondThrow(0);
             return true;
         }
@@ -180,14 +185,13 @@ class Round
     public function getScore(): array
     {
         return [$this->first_throw, $this->second_throw];
-        
     }
 
     /**
      * Fonction qui attribue le score du round au joueur
-     * @param Players $player
+     * @param Player $player
      */
-    public function setScore(Players $player): void
+    public function setScore(Player $player): void
     {
         $player->set_marked_points($this->getScore());
     }

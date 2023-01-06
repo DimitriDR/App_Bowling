@@ -72,11 +72,11 @@ class Player
      */
     public function set_marked_points(array $round_data): void
     {
-        array_push($this->marked_points, $round_data);
+        $this->marked_points[] = $round_data;
     }
 
     /**
-     * @return int Nombre de points marqués par le  joueur
+     * @return int Nombre de points marqués par le joueur
      */
     public function count_marked_points(): int
     {
@@ -110,5 +110,7 @@ class Player
                 $count += $this->marked_points[$i]->get_second_throw();
             }
         }
+
+        return $count;
     }
 }

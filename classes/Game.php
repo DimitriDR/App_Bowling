@@ -12,34 +12,30 @@ class Game
     private array $players = [];
 
     /**
-<<<<<<< HEAD
      * @var int Numéro du round actuel
-     * @note Le premier round est le round 1
-     * @note Le dernier round est le round 10
-     * @note Le round 11 est le round bonus : il est utilisé uniquement si le joueur fait un strike ou un spare au round 10
+     * @note Le premier round est le round 1. Le dernier round est le round 10. Le round 11 est le round bonus : il est utilisé uniquement si le joueur fait un strike ou un spare au round 10
      */
     private int $current_round = 1;
 
     /**
      * @var int Numéro du joueur actuel
-     * @note Le premier joueur est le joueur 1
-     * @note Le dernier joueur est le joueur sizeof($this->players)
-     */
+     * @note Le premier joueur est le joueur 1. Le dernier joueur est le joueur sizeof($this->players)
+    **/
     private int $current_player = 1;
 
     /**
      * Fonction pour récupérer le numéro du round actuel
-     * @return int
-     */
+     * @return int Numéro du round actuel
+    **/
     public function get_current_round(): int
     {
         return $this->current_round;
     }
 
     /**
-     * Fonction pour récupérer le numéro du joueur actuel
-     * @return int
-     */
+     * Fonction pour récupérer le numéro du joueur courant
+     * @return int Numéro du joueur courant
+    **/
     public function get_current_player(): int
     {
         return $this->current_player;
@@ -50,7 +46,7 @@ class Game
      * @param int $round Nouveau numéro de round
      * @return void
      * @throws InvalidArgumentException Si le numéro de round est inférieur à 1 ou supérieur à 11
-     */
+    **/
     public function set_current_round(int $round): void
     {
         if (($round < 1) || ($round > 11)) {
@@ -76,8 +72,6 @@ class Game
     }
 
     /**
-=======
->>>>>>> 0ed1c33aef58a1a5d7c3119ab50a4bfe4dc667ec
      * Constructeur permettant d'intégrer directement une liste de joueurs
      * @param array $players Liste initiale des joueurs
     **/
@@ -99,11 +93,7 @@ class Game
     /**
      * Fonction pour récupérer un objet Player à un emplacement du tableau via $id
      * @param int $id Joueur à récupérer
-<<<<<<< HEAD
-     * @return Player Joueur  trouvé
-=======
      * @return Player Joueur trouvé
->>>>>>> 0ed1c33aef58a1a5d7c3119ab50a4bfe4dc667ec
      * @throws InvalidArgumentException Si $id dépasse les bornes du tableau
     **/
     public function get_player_at(int $id): Player
@@ -115,7 +105,6 @@ class Game
             throw new InvalidArgumentException("L'ID dépasse le nombre de joueurs présents");
         }
     }
-<<<<<<< HEAD
 
     /**
      * Fonction pour démarrer une partie
@@ -124,14 +113,12 @@ class Game
      */
     public function start(): void
     {
-        if ($this->current_round != 1) {
+        if ($this->current_round != 1)
+        {
             throw new InvalidArgumentException("La partie a déjà été démarrée");
         }
 
-        $this->current_round = 1;
-        $this->current_player = 1;
+        $this->current_round    = 1;
+        $this->current_player   = 1;
     }
-
-=======
->>>>>>> 0ed1c33aef58a1a5d7c3119ab50a4bfe4dc667ec
 }
