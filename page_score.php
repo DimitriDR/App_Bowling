@@ -10,7 +10,16 @@
         
         <div class="login-form">
             <?php
-            session_start(); 
+            include "classes/Player.php"; 
+            include "classes/Game.php";
+            include "indextraitement.php";
+            require_once ("indextraitement.php");
+            session_start();
+            $game= new Game([]);
+            for ($i=1; $i <= unserialize($_SESSION['number']); $i++) {
+                $player= new Player(htmlspecialchars($_POST['player'.$i]));
+                $game->add_player($player);
+            } 
  
                 if(isset($_GET['error']))
                 {
@@ -56,31 +65,24 @@
                         </div>
                     <?php
                 }
-
-                include "classes/Player.php"; 
-                include "classes/Game.php";
-                include "indextraitement.php";
-                require_once ("indextraitement.php");
-
                 //echo '<h2 class="text-center">Tour n° 1</h2>'; //a changer en fonction du tour
 
-                //ajout des joueurs dans une partie
-                $game= new Game([]);
-                for ($i=1; $i <= unserialize($_SESSION['number']); $i++) {
-                    $player= new Player(htmlspecialchars($_GET['player'.$i]));
-                    $game->add_player($player);
-                }
+                //ajout des joueurs dans une partie si il n'y a pas d'erreur
                 // serialize et lina va unserialize
-                //echo $game->get_player_at(0)->name;
-                $_SESSION['game'] = serialize($game);
                 // print_r($game); pour afficher le tableau
 
             ?>
              
             <form action="enregistrerscore.php" method="post">
-                <h2 class="text-center">Enregistrez Votre Score</h2> 
-                <div> <label for="nom">Joueur :</label> </div>
-                <label for="tour">Tour n°  :</label>  
+                <h2 class="text-center">Enregistrez Votre Score</h2>
+                <?php
+                $joueur = $game->get_current_player_name();
+                echo '<div> <label for="nom">Joueur : '.$joueur.'</label></div>';
+                    $num_tour=$game->get_current_round();
+                    $num_lancer=$game->get_current_throw();
+                echo'<label for="tour">Tour n° '.$num_tour.' / Lancer n° '.$num_lancer.'</label>';
+                $_SESSION['game'] = serialize($game);
+                ?> 
                 <div class="form-group">
                     <input type="text" name="score" class="form-control" placeholder="Score" required="required" autocomplete="off">
                 </div>

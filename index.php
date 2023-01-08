@@ -35,7 +35,7 @@
                         }
                     }
         ?>
-            <form action="indextraitement.php" method="GET">
+            <form action="indextraitement.php" method="POST">
                 <h2 class="text-center">Créer une partie</h2>       
                 <div class="form-group">
                     <input type="text" name="playersnumber" class="form-control" placeholder="Indiquez le nombre de joueurs" required="required" autocomplete="off">
