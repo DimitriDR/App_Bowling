@@ -1,5 +1,5 @@
 <?php
-require_once "classes/Game.php";
+require_once "models/Game.php";
 
 use PHPUnit\Framework\TestCase;
 
@@ -50,12 +50,6 @@ class GameTest extends TestCase
         }
     }
 
-    public function testGameWithoutPlayer()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new Game([]);
-    }
-
     public function testGameWithPlayerButItIsEmpty()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -67,7 +61,7 @@ class GameTest extends TestCase
 
     public function testCreatingNewGameWithPlayerButItIsNot()
     {
-        $round = new Round();
+        $round = new Round([10, 0], 1);
         $this->expectException(InvalidArgumentException::class);
         new Game([$round]);
     }

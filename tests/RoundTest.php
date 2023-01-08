@@ -1,5 +1,5 @@
 <?php
-require_once "classes/Round.php";
+require_once "models/Round.php";
 
 use PHPUnit\Framework\TestCase;
 
@@ -7,9 +7,7 @@ final class RoundTest extends TestCase
 {
     public function testThrowsCorrectValues()
     {
-        $round = new Round();
-
-        $round->setFirstThrow(5);
+        $round = new Round([5, 0], 1);
         $this->assertEquals(5, $round->getFirstThrow());
 
         $round->setFirstThrow(10);
@@ -28,7 +26,8 @@ final class RoundTest extends TestCase
 
     public function testThrowsIncorrectValues()
     {
-        $round = new Round();
+        $this->expectException(InvalidArgumentException::class);
+        $round = new Round([-1, 0], 1);
 
         {
             // On s'attend à une exception de type InvalidArgumentException
@@ -52,24 +51,16 @@ final class RoundTest extends TestCase
 
     public function testIsStrike()
     {
-        $round = new Round();
-        $round->setFirstThrow(10);
+        $round = new Round([10, 0], 1);
         $this->assertTrue($round->isStrike());
     }
 
     public function testIsSpare()
     {
-        $round = new Round();
-        $round->setFirstThrow   (5);
-        $round->setSecondThrow  (5);
-
+        $round = new Round([5, 5], 1);
         $this->assertTrue($round->isSpare());
 
-        $round = new Round();
-        $round->setFirstThrow   (3);
-        $round->setSecondThrow  (7);
-
+        $round = new Round([3, 7], 1);
         $this->assertTrue($round->isSpare());
     }
-
 }

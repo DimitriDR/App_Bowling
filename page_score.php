@@ -57,8 +57,8 @@
                     <?php
                 }
 
-                include "classes/Player.php"; 
-                include "classes/Game.php";
+                include "models/Player.php";
+                include "models/Game.php";
                 include "indextraitement.php";
                 require_once ("indextraitement.php");
 

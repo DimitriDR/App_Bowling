@@ -121,7 +121,7 @@ class Round
     /**
      * Assesseur pour avoir le troisième lancer
      * @return int
-     */
+    **/
     public function getThirdThrow(): int
     {
         return $this->third_throw;
@@ -131,7 +131,7 @@ class Round
      * Mutateur pour le troisième lancer
      * @param int $third_throw
      * @throws InvalidArgumentException
-     */
+    **/
     public function setThirdThrow(int $third_throw): void
     {
         if ($third_throw < 0 || $third_throw > 10)

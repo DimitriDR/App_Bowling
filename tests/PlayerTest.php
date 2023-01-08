@@ -1,5 +1,5 @@
 <?php
-require_once "classes/Player.php";
+require_once "models/Player.php";
 
 use PHPUnit\Framework\TestCase;
 

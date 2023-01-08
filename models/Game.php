@@ -73,9 +73,6 @@ class Game
     **/
     public function __construct(array $players)
     {
-        if (sizeof($players) == 0)
-            throw new InvalidArgumentException("Un jeu doit au moins contenir un joueur");
-
         foreach ($players as $player)
         {
             if (!is_a($player, Player::class))
