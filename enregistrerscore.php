@@ -1,4 +1,13 @@
 <?php
+    include "classes/Game.php";
+    include "classes/Player.php";
+    session_start();
+
+
+    echo '<h1>Tour n° 1</h1>'; //a changer en fonction du tour
+
+    echo unserialize($_SESSION['game'])->get_current_player_name();
+
     //Récupération du score de la page page_score.php et le stocker en int dans la variable $score
     $score = htmlspecialchars($_POST['score']);
 
@@ -21,6 +30,10 @@
         elseif($score + $score > 10)
         {
             header('Location: page_score.php?error=scoremax');
+        }
+        else{
+            echo 'ok';
+            
         }
     }
 ?>
