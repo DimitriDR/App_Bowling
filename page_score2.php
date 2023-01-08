@@ -10,17 +10,14 @@
         
         <div class="login-form">
             <?php
-            include "models/Player.php";
-            include "models/Game.php";
+            include "classes/Player.php"; 
+            include "classes/Game.php";
             include "indextraitement.php";
             require_once ("indextraitement.php");
             session_start();
-            $game= new Game([]);
-            for ($i=1; $i <= unserialize($_SESSION['number']); $i++) {
-                $player= new Player(htmlspecialchars($_POST['player'.$i]));
-                $game->add_player($player);
-            }
- 
+            
+            $game = unserialize($_SESSION['game']);
+
                 if(isset($_GET['error']))
                 {
                     $error = htmlspecialchars($_GET['error']);
@@ -68,22 +65,21 @@
                     if($game->get_current_throw() > 2)
                     {
                         $game->set_current_throw(1);
-                        $game->set_current_round($game->get_current_round()+1);
-                        $game->set_current_player($game->get_current_player()+1);
+                        if($game->get_current_player() == count($game->get_players()))
+                        {
+                            $game->set_current_player(1);
+                            $game->set_current_round($game->get_current_round()+1);
+                        }
+                        else
+                        {
+                            $game->set_current_player($game->get_current_player()+1);
+                        }
                     }
                 }
-
-                include "classes/Player.php"; 
-                include "classes/Game.php";
-                include "indextraitement.php";
-                require_once ("indextraitement.php");
-
                 //echo '<h2 class="text-center">Tour n° 1</h2>'; //a changer en fonction du tour
 
                 //ajout des joueurs dans une partie si il n'y a pas d'erreur
                 // serialize et lina va unserialize
-                //echo $game->get_player_at(0)->name;
-                $_SESSION['game'] = serialize($game);
                 // print_r($game); pour afficher le tableau
 
             ?>
@@ -91,13 +87,13 @@
             <form action="enregistrerscore.php" method="post">
                 <h2 class="text-center">Enregistrez Votre Score</h2>
                 <?php
-                $joueur = $game->get_current_player_name();
+                $joueur = $game->get_current_player_object()->name;
                 echo '<div> <label for="nom">Joueur : '.$joueur.'</label></div>';
                     $num_tour=$game->get_current_round();
                     $num_lancer=$game->get_current_throw();
                 echo'<label for="tour">Tour n° '.$num_tour.' / Lancer n° '.$num_lancer.'</label>';
                 $_SESSION['game'] = serialize($game);
-                ?>
+                ?> 
                 <div class="form-group">
                     <input type="text" name="score" class="form-control" placeholder="Score" required="required" autocomplete="off">
                 </div>

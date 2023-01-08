@@ -17,7 +17,32 @@ class Game
      * @var int Numéro du joueur actuel
      * @note Le premier joueur est le joueur 1. Le dernier joueur est le joueur sizeof($this->players)
     **/
-    private int $current_player = 1;
+    private int $current_player = 0;
+
+    /**
+     * @var int Numéro du lancer actuel
+     * @note Le premier lancer est le lancer 1. Le dernier lancer est le lancer 2. Le lancer 3 est utilisé uniquement pour le dernier round
+     * @note Si le joueur fait un strike, il n'a pas le droit au second lancer
+     */
+    private int $current_throw = 1;
+
+    /**
+     * @return int Numéro du lancer actuel
+     **/
+    public function get_current_throw(): int
+    {
+        return $this->current_throw;
+    }
+
+    /**
+     * @param int $current_throw Numéro du lancer actuel
+     * @return void
+     **/
+    public function set_current_throw(int $current_throw): void
+    {
+        $this->current_throw = $current_throw;
+    }
+
 
     /**
      * Fonction pour récupérer le numéro du round actuel
@@ -35,6 +60,34 @@ class Game
     public function get_current_player(): int
     {
         return $this->current_player;
+    }
+
+    /**
+     * Fonction pour récupérer le joueur courant
+     * @return Player Joueur courant
+     * @throws OutOfBoundsException Si le numéro du joueur actuel est inférieur à 0 ou supérieur à sizeof($this->players)
+     */
+    public function get_current_player_object(): Player
+    {
+        if (($this->current_player < 0) || ($this->current_player > sizeof($this->players))) {
+            throw new OutOfBoundsException("Le numéro de joueur doit être compris entre 1 et " . sizeof($this->players));
+        }
+
+        return $this->players[$this->current_player];
+    }
+
+    /**
+     * Fonction pour récupérer le nom du joueur courant
+     * @return string Nom du joueur courant
+     * @throws OutOfBoundsException Si le numéro du joueur actuel est inférieur à 0 ou supérieur à sizeof($this->players)
+     */
+    public function get_current_player_name(): string
+    {
+        if (($this->current_player < 0) || ($this->current_player > sizeof($this->players))) {
+            throw new OutOfBoundsException("Le numéro de joueur doit être compris entre 1 et " . sizeof($this->players));
+        }
+
+        return $this->players[$this->current_player]->name;
     }
 
     /**
@@ -56,12 +109,12 @@ class Game
      * Fonction pour mettre à jour le numéro du joueur actuel
      * @param int $player Nouveau numéro de joueur
      * @return void
-     * @throws InvalidArgumentException Si le numéro de joueur est inférieur à 1 ou supérieur à sizeof($this->players)
+     * @note Si le numéro de joueur est supérieur à sizeof($this->players), on revient au joueur 1
      */
     public function set_current_player(int $player): void
     {
-        if (($player < 1) || ($player > sizeof($this->players))) {
-            throw new InvalidArgumentException("Le numéro de joueur doit être compris entre 1 et " . sizeof($this->players));
+        if ($player >= sizeof($this->players)) {
+            $player = 1;
         }
 
         $this->current_player = $player;
@@ -111,6 +164,15 @@ class Game
         } else {
             throw new InvalidArgumentException("L'ID dépasse le nombre de joueurs présents");
         }
+    }
+
+    /**
+     * Fonction pour récupérer les joueurs de la partie
+     * @return array Liste des joueurs
+     */
+    public function get_players(): array
+    {
+        return $this->players;
     }
 
     /**
