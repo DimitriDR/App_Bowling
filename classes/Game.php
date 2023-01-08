@@ -34,6 +34,14 @@ class Game
         return $this->current_throw;
     }
 
+    /**
+     * @param int $current_throw Numéro du lancer actuel
+     * @return void
+     **/
+    public function set_current_throw(int $current_throw): void
+    {
+        $this->current_throw = $current_throw;
+    }
     
 
     /**
@@ -52,6 +60,20 @@ class Game
     public function get_current_player(): int
     {
         return $this->current_player;
+    }
+
+    /**
+     * Fonction pour récupérer le joueur courant
+     * @return Player Joueur courant
+     * @throws OutOfBoundsException Si le numéro du joueur actuel est inférieur à 0 ou supérieur à sizeof($this->players)
+     */
+    public function get_current_player_object(): Player
+    {
+        if (($this->current_player < 0) || ($this->current_player > sizeof($this->players))) {
+            throw new OutOfBoundsException("Le numéro de joueur doit être compris entre 1 et " . sizeof($this->players));
+        }
+
+        return $this->players[$this->current_player];
     }
 
     /**
@@ -87,13 +109,14 @@ class Game
      * Fonction pour mettre à jour le numéro du joueur actuel
      * @param int $player Nouveau numéro de joueur
      * @return void
-     * @throws InvalidArgumentException Si le numéro de joueur est inférieur à 1 ou supérieur à sizeof($this->players)
+     * @note si le numéro de joueur est supérieur à sizeof($this->players), on revient au joueur 1
      */
     public function set_current_player(int $player): void
     {
-        if (($player < 0) || ($player > sizeof($this->players))) {
-            throw new InvalidArgumentException("Le numéro de joueur doit être compris entre 1 et " . sizeof($this->players));
+        if ($player >= sizeof($this->players)) {
+            $player = 1;
         }
+
         $this->current_player = $player;
     }
 
@@ -143,6 +166,15 @@ class Game
         } else {
             throw new InvalidArgumentException("L'ID dépasse le nombre de joueurs présents");
         }
+    }
+
+    /**
+     * Fonction pour récupérer les joueurs de la partie
+     * @return array Liste des joueurs
+     */
+    public function get_players(): array
+    {
+        return $this->players;
     }
 
     /**

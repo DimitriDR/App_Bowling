@@ -15,12 +15,9 @@
             include "indextraitement.php";
             require_once ("indextraitement.php");
             session_start();
-            $game= new Game([]);
-            for ($i=1; $i <= unserialize($_SESSION['number']); $i++) {
-                $player= new Player(htmlspecialchars($_POST['player'.$i]));
-                $game->add_player($player);
-            } 
- 
+            
+            $game = unserialize($_SESSION['game']);
+
                 if(isset($_GET['error']))
                 {
                     $error = htmlspecialchars($_GET['error']);
@@ -64,12 +61,19 @@
                             <i class="fas fa-check"></i> Votre score a bien été enregistré !
                         </div>
                     <?php
-                    $game->set_current_throw($game->get_current_throw()+1);                
+                    $game->set_current_throw($game->get_current_throw()+1);
                     if($game->get_current_throw() > 2)
                     {
                         $game->set_current_throw(1);
-                        $game->set_current_round($game->get_current_round()+1);
-                        $game->set_current_player($game->get_current_player()+1);
+                        if($game->get_current_player() == count($game->get_players()))
+                        {
+                            $game->set_current_player(1);
+                            $game->set_current_round($game->get_current_round()+1);
+                        }
+                        else
+                        {
+                            $game->set_current_player($game->get_current_player()+1);
+                        }
                     }
                 }
                 //echo '<h2 class="text-center">Tour n° 1</h2>'; //a changer en fonction du tour
@@ -83,7 +87,7 @@
             <form action="enregistrerscore.php" method="post">
                 <h2 class="text-center">Enregistrez Votre Score</h2>
                 <?php
-                $joueur = $game->get_current_player_name();
+                $joueur = $game->get_current_player_object()->name;
                 echo '<div> <label for="nom">Joueur : '.$joueur.'</label></div>';
                     $num_tour=$game->get_current_round();
                     $num_lancer=$game->get_current_throw();
