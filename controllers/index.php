@@ -25,4 +25,4 @@ if ($player_number <= 0 || $player_number > 20)
 
 // Ajout du nombre de joueurs dans la partie, maintenant que l'entrée a été rendue propre
 $_SESSION["game_data"]["player_number"] = $player_number;
-header("Location: /");
+header("Location: /views/player_name.php");

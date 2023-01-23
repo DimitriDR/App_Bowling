@@ -1,5 +1,6 @@
 <?php
-require_once 'classes/Round.php';
+require_once 'Round.php';
+
 class Player 
 {
     /**
