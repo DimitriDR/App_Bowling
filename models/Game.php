@@ -9,7 +9,8 @@ class Game
 
     /**
      * @var int Numéro du round actuel
-     * @note Le premier round est le round 1. Le dernier round est le round 10. Le round 11 est le round bonus : il est utilisé uniquement si le joueur fait un strike ou un spare au round 10
+     * @note Le premier round est le round 1. Le dernier round est le round 10.
+     * Le round 11 est le round bonus : il est utilisé uniquement si le joueur fait un strike ou un spare au round 10
      */
     private int $current_round = 1;
 
@@ -51,6 +52,15 @@ class Game
     public function get_current_round(): int
     {
         return $this->current_round;
+    }
+
+    /**
+     * Fonction retournant le nombre total de joueurs dans la partie.
+     * @return int Nombre de joueurs total
+     */
+    public function get_player_number(): int
+    {
+        return sizeof($this->players);
     }
 
     /**
@@ -129,14 +139,16 @@ class Game
         foreach ($players as $player)
         {
             if (!is_a($player, Player::class))
+            {
                 throw new InvalidArgumentException("Un joueur doit être une instance de la classe Player");
+            }
         }
 
         $this->players = $players;
     }
 
     /**
-     * Fonction pour ajouter un joueur après que l'objet ait été créé
+     * Fonction pour ajouter un joueur après que l'objet a été créé
      * @param Player $player
      * @return void
      * @throws InvalidArgumentException Exception levée si le joueur est déjà présent dans la partie

@@ -26,15 +26,15 @@ class Player
     {
         $this->name = $name;
         $this->score = 0;
-        $this->marked_points = [ new Round([0, 0], 1),
-                                 new Round([0, 0], 2),
-                                 new Round([0, 0], 3),
-                                 new Round([0, 0], 4),
-                                 new Round([0, 0], 5),
-                                 new Round([0, 0], 6),
-                                 new Round([0, 0], 7),
-                                 new Round([0, 0], 8),
-                                 new Round([0, 0], 9),
+        $this->marked_points = [ new Round([0, 0]   , 1 ),
+                                 new Round([0, 0]   , 2 ),
+                                 new Round([0, 0]   , 3 ),
+                                 new Round([0, 0]   , 4 ),
+                                 new Round([0, 0]   , 5 ),
+                                 new Round([0, 0]   , 6 ),
+                                 new Round([0, 0]   , 7 ),
+                                 new Round([0, 0]   , 8 ),
+                                 new Round([0, 0]   , 9 ),
                                  new Round([0, 0, 0], 10)
                                ];
     }
