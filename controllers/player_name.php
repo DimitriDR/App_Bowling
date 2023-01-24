@@ -16,7 +16,7 @@ for ($i = 0; $i < $game_data["player_number"]; $i++)
     if (!(isset($_POST["player_name_" . $i])))
     {
         $_SESSION["error_message"] = "Le nom d'un joueur est manquant. Veuillez réessayer.";
-        header("Location: /views/player_name.php");
+        header("Location: /player_name.php");
         break;
     }
 }
@@ -38,5 +38,5 @@ for ($j = 0; $j < $game_data["player_number"]; $j++)
 
 $_SESSION["game_data"] = $game_data;
 
-header("Location: /");
+header("Location: /play.php");
 exit(0);
