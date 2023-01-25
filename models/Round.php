@@ -26,6 +26,29 @@ class Round
      */
     private int $turn;
 
+    /***
+     * Fonction permettant de savoir quel est le prochain lancer.
+     * Par ordre croissant, si le numéro est à 0, alors le lancer n'a pas encore
+     * été effectué et c'est ce numéro que l'on retourne.
+     * @return int Numéro du lancer (1, 2 ou 3). Retourne -1 si tous les lancers ont été effectués
+    ***/
+    public function next_throw(): int
+    {
+        if ($this->first_throw == 0)
+        {
+            return 1;
+        }
+        elseif ($this->second_throw == 0)
+        {
+            return 2;
+        }
+        elseif ($this->third_throw == 0)
+        {
+            return 3;
+        }
+
+        return -1;
+    }
     /**
      * Constructeur de la classe Round
      * @param array $round_data Tableau contenant les valeurs des lancers
@@ -63,7 +86,7 @@ class Round
      * Assesseur pour avoir la valeur du premier lancer
      * @return int Valeur du premier lancer
      */
-    public function getFirstThrow(): int
+    public function get_first_throw(): int
     {
         return $this->first_throw;
     }
@@ -73,7 +96,7 @@ class Round
      * @param int $throw_value Valeur du premier lancer comprises en 0 et 10
      * @throws InvalidArgumentException Exception levée si la valeur du lancer n'est pas comprise dans l'intervalle [0, 10]
      */
-    public function setFirstThrow(int $throw_value): void
+    public function set_first_throw(int $throw_value): void
     {
         if ($throw_value < 0 || $throw_value > 10)
         {
@@ -87,7 +110,7 @@ class Round
      * Assesseur pour avoir la valeur du second lancer
      * @return int Valeur du second lancer
      */
-    public function getSecondThrow(): int
+    public function get_second_throw(): int
     {
         return $this->second_throw;
     }
@@ -97,7 +120,7 @@ class Round
      * @param int $throw_value Valeur du second lancer comprises en 0 et 10
      * @throws InvalidArgumentException Exception levée si la valeur du lancer n'est pas comprise dans l'intervalle [0, 10]
      */
-    public function setSecondThrow(int $throw_value): void
+    public function set_second_throw(int $throw_value): void
     {
         if ($throw_value < 0 || $throw_value > 10)
         {
@@ -122,7 +145,7 @@ class Round
      * Assesseur pour avoir le troisième lancer
      * @return int
     **/
-    public function getThirdThrow(): int
+    public function get_third_throw(): int
     {
         return $this->third_throw;
     }
@@ -132,21 +155,27 @@ class Round
      * @param int $third_throw
      * @throws InvalidArgumentException
     **/
-    public function setThirdThrow(int $third_throw): void
+    public function set_third_throw(int $third_throw): void
     {
         if ($third_throw < 0 || $third_throw > 10)
         {
-            throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et 10");
+            throw new InvalidArgumentException(
+                "La valeur du lancer doit être comprise entre 0 et 10"
+            );
         }
 
         if ($this->turn != 10)
         {
-            throw new InvalidArgumentException("Le troisième lancer n'est utilisé que pour le dernier tour");
+            throw new InvalidArgumentException(
+                "Le troisième lancer n'est utilisé que pour le dernier tour"
+            );
         }
 
         if ($this->first_throw + $this->second_throw < 10)
         {
-            throw new InvalidArgumentException("Le troisième lancer n'est utilisé que si le joueur fait un strike ou un spare");
+            throw new InvalidArgumentException(
+                "Le troisième lancer n'est utilisé que si le joueur fait un strike ou un spare"
+            );
         }
 
         $this->third_throw = $third_throw;
@@ -156,7 +185,7 @@ class Round
      * Fonction qui permet de savoir si le joueur a fait un strike
      * @return bool
      */
-    public function isStrike(): bool
+    public function is_strike(): bool
     {
         if ($this->first_throw === 10)
         {

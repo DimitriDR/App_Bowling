@@ -8,19 +8,19 @@ final class RoundTest extends TestCase
     public function testThrowsCorrectValues()
     {
         $round = new Round([5, 0], 1);
-        $this->assertEquals(5, $round->getFirstThrow());
+        $this->assertEquals(5, $round->get_first_throw());
 
-        $round->setFirstThrow(10);
-        $this->assertEquals(10, $round->getFirstThrow());
+        $round->set_first_throw(10);
+        $this->assertEquals(10, $round->get_first_throw());
 
-        $round->setFirstThrow(0);
-        $this->assertEquals(0, $round->getFirstThrow());
+        $round->set_first_throw(0);
+        $this->assertEquals(0, $round->get_first_throw());
 
         $round->setSecondThrow(5);
-        $this->assertEquals(5, $round->getSecondThrow());
+        $this->assertEquals(5, $round->get_second_throw());
 
         $round->setSecondThrow(0);
-        $this->assertEquals(0, $round->getSecondThrow());
+        $this->assertEquals(0, $round->get_second_throw());
 
     }
 
@@ -32,7 +32,7 @@ final class RoundTest extends TestCase
         {
             // On s'attend à une exception de type InvalidArgumentException
             $this->expectException(InvalidArgumentException::class);
-            $round->setFirstThrow(-1);
+            $round->set_first_throw(-1);
 
             $this->expectException(InvalidArgumentException::class);
             $round->setSecondThrow(-1);
@@ -42,17 +42,17 @@ final class RoundTest extends TestCase
         {
             // Idem, mais à la borne supérieure autorisée
             $this->expectException(InvalidArgumentException::class);
-            $round->setFirstThrow(11);
+            $round->set_first_throw(11);
 
             $this->expectException(InvalidArgumentException::class);
-            $round->getSecondThrow(11);
+            $round->get_second_throw(11);
         }
     }
 
     public function testIsStrike()
     {
         $round = new Round([10, 0], 1);
-        $this->assertTrue($round->isStrike());
+        $this->assertTrue($round->is_strike());
     }
 
     public function testIsSpare()

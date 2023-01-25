@@ -22,12 +22,43 @@ class Game
 
     /**
      * @var int Numéro du lancer actuel
-     * @note Le premier lancer est le lancer 1. Le dernier lancer est le lancer 2. Le lancer 3 est utilisé uniquement pour le dernier round
+     * @note Le premier lancer est le lancer 1. Le dernier lancer est le lancer 2.
+     * Le lancer 3 est utilisé uniquement pour le dernier round
      * @note Si le joueur fait un strike, il n'a pas le droit au second lancer
      */
     private int $current_throw = 1;
 
     /**
+     * Constructeur permettant d'intégrer directement une liste de joueurs
+     * @param array $players Liste initiale des joueurs
+     **/
+    public function __construct(array $players)
+    {
+        // On parcourt tous les joueurs pour vérifier qu'ils sont bien des instances de la classe Player
+        foreach ($players as $player)
+        {
+            if (!is_a($player, Player::class))
+            {
+                throw new InvalidArgumentException("Un joueur doit être une instance de la classe Player");
+            }
+        }
+
+        $this->players = $players;
+    }
+
+    public function register_throw(int $value)
+    {
+        // On récupère le joueur actuel pour mettre la valeur du
+        // lancer dans le tableau des points marqués grâce à la fonction intégrée
+        $player = $this->get_current_player_object();
+
+        // Récupération des variables proprement
+        $current_round = $this->get_current_round();
+
+        $player->set_thrown_value($value, $current_round);
+    }
+
+        /**
      * @return int Numéro du lancer actuel
      **/
     public function get_current_throw(): int
@@ -80,7 +111,9 @@ class Game
     public function get_current_player_object(): Player
     {
         if (($this->current_player < 0) || ($this->current_player > sizeof($this->players))) {
-            throw new OutOfBoundsException("Le numéro de joueur doit être compris entre 1 et " . sizeof($this->players));
+            throw new OutOfBoundsException(
+                "Le numéro de joueur doit être compris entre 1 et " . sizeof($this->players)
+                    );
         }
 
         return $this->players[$this->current_player];
@@ -94,7 +127,9 @@ class Game
     public function get_current_player_name(): string
     {
         if (($this->current_player < 0) || ($this->current_player > sizeof($this->players))) {
-            throw new OutOfBoundsException("Le numéro de joueur doit être compris entre 1 et " . sizeof($this->players));
+            throw new OutOfBoundsException(
+                "Le numéro de joueur doit être compris entre 1 et " . sizeof($this->players)
+            );
         }
 
         return $this->players[$this->current_player]->name;
@@ -131,23 +166,6 @@ class Game
     }
 
     /**
-     * Constructeur permettant d'intégrer directement une liste de joueurs
-     * @param array $players Liste initiale des joueurs
-    **/
-    public function __construct(array $players)
-    {
-        foreach ($players as $player)
-        {
-            if (!is_a($player, Player::class))
-            {
-                throw new InvalidArgumentException("Un joueur doit être une instance de la classe Player");
-            }
-        }
-
-        $this->players = $players;
-    }
-
-    /**
      * Fonction pour ajouter un joueur après que l'objet a été créé
      * @param Player $player
      * @return void
@@ -157,7 +175,9 @@ class Game
     {
         // Check if the parameter $player is the good class
         if (!(isset($player->name)))
+        {
             throw new InvalidArgumentException("Le joueur ne peut pas être nul");
+        }
 
         $this->players[] = $player;
     }
@@ -185,21 +205,5 @@ class Game
     public function get_players(): array
     {
         return $this->players;
-    }
-
-    /**
-     * Fonction pour démarrer une partie
-     * @return void
-     * @throws InvalidArgumentException Si la partie a déjà été démarrée
-     */
-    public function start(): void
-    {
-        if ($this->current_round != 1)
-        {
-            throw new InvalidArgumentException("La partie a déjà été démarrée");
-        }
-
-        $this->current_round    = 1;
-        $this->current_player   = 1;
     }
 }
