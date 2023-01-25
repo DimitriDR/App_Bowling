@@ -2,7 +2,13 @@ name:
   CI
 
 # Quand cette action sera déclenchée ?
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
 
 # Tâches ("jobs") à accomplir
 jobs:
