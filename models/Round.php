@@ -41,6 +41,7 @@ class Round
         elseif ($this->second_throw == 0)
         {
             return 2;
+
         }
         elseif ($this->third_throw == 0)
         {
@@ -77,8 +78,10 @@ class Round
             $this->third_throw = $round_data[2];
         }
 
+        //TODO: vérifier s'il est toujours pertinent de définir les valeurs selon les paramètres
         $this->first_throw = $round_data[0];
         $this->second_throw = $round_data[1];
+        $this->third_throw = 0;
         $this->turn = $turn;
     }
 
@@ -163,13 +166,13 @@ class Round
                 "La valeur du lancer doit être comprise entre 0 et 10"
             );
         }
-
-        if ($this->turn != 10)
-        {
-            throw new InvalidArgumentException(
-                "Le troisième lancer n'est utilisé que pour le dernier tour"
-            );
-        }
+//
+//        if ($this->turn != 10)
+//        {
+//            throw new InvalidArgumentException(
+//                "Le troisième lancer n'est utilisé que pour le dernier tour"
+//            );
+//        }
 
         if ($this->first_throw + $this->second_throw < 10)
         {
@@ -200,7 +203,7 @@ class Round
      * @return bool
      */
 
-    public function isSpare(): bool
+    public function is_spare(): bool
     {
         return $this->first_throw + $this->second_throw === 10;
     }
@@ -209,7 +212,7 @@ class Round
      * Fonction qui retourne le score du round
      * @return array
      */
-    public function getScore(): array
+    public function get_score(): array
     {
         return [$this->first_throw, $this->second_throw];
     }
@@ -220,7 +223,7 @@ class Round
      */
     public function setScore(Player $player): void
     {
-        $player->set_marked_points($this->getScore());
+        $player->set_marked_points($this->get_score());
     }
 
 }

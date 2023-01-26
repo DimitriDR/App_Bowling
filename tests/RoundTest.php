@@ -58,9 +58,9 @@ final class RoundTest extends TestCase
     public function testIsSpare()
     {
         $round = new Round([5, 5], 1);
-        $this->assertTrue($round->isSpare());
+        $this->assertTrue($round->is_spare());
 
         $round = new Round([3, 7], 1);
-        $this->assertTrue($round->isSpare());
+        $this->assertTrue($round->is_spare());
     }
 }

@@ -17,7 +17,7 @@ class Game
     /**
      * @var int Numéro du joueur actuel
      * @note Le premier joueur est le joueur 1. Le dernier joueur est le joueur sizeof($this->players)
-    **/
+     **/
     private int $current_player = 0;
 
     /**
@@ -46,19 +46,27 @@ class Game
         $this->players = $players;
     }
 
-    public function register_throw(int $value)
+    /**
+     * Fonction permettant d'inscrire la valeur du lancer dans le joueur actuel et le round actuel
+     * @param int $value_to_save Valeur du lancer (entre 0 et 10)
+     * @return void
+     * @throws InvalidArgumentException Si la valeur du lancer est strictement inférieure à 0 ou supérieure à 10
+     **/
+    public function register_throw(int $value_to_save): void
     {
+        // Vérification d'une valeur cohérente
+        if (($value_to_save < 0) || ($value_to_save > 10))
+        {
+            throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et 10");
+        }
+
         // On récupère le joueur actuel pour mettre la valeur du
         // lancer dans le tableau des points marqués grâce à la fonction intégrée
-        $player = $this->get_current_player_object();
-
-        // Récupération des variables proprement
-        $current_round = $this->get_current_round();
-
-        $player->set_thrown_value($value, $current_round);
+        $player = $this->get_current_player();
+        $player->set_thrown_value($value_to_save, $this->get_current_round());
     }
 
-        /**
+    /**
      * @return int Numéro du lancer actuel
      **/
     public function get_current_throw(): int
@@ -75,11 +83,10 @@ class Game
         $this->current_throw = $current_throw;
     }
 
-
     /**
      * Fonction pour récupérer le numéro du round actuel
      * @return int Numéro du round actuel
-    **/
+     **/
     public function get_current_round(): int
     {
         return $this->current_round;
@@ -95,44 +102,20 @@ class Game
     }
 
     /**
-     * Fonction pour récupérer le numéro du joueur courant
-     * @return int Numéro du joueur courant
-    **/
-    public function get_current_player(): int
-    {
-        return $this->current_player;
-    }
-
-    /**
      * Fonction pour récupérer le joueur courant
      * @return Player Joueur courant
      * @throws OutOfBoundsException Si le numéro du joueur actuel est inférieur à 0 ou supérieur à sizeof($this->players)
-     */
-    public function get_current_player_object(): Player
+     **/
+    public function get_current_player(): Player
     {
-        if (($this->current_player < 0) || ($this->current_player > sizeof($this->players))) {
-            throw new OutOfBoundsException(
-                "Le numéro de joueur doit être compris entre 1 et " . sizeof($this->players)
-                    );
-        }
-
-        return $this->players[$this->current_player];
-    }
-
-    /**
-     * Fonction pour récupérer le nom du joueur courant
-     * @return string Nom du joueur courant
-     * @throws OutOfBoundsException Si le numéro du joueur actuel est inférieur à 0 ou supérieur à sizeof($this->players)
-     */
-    public function get_current_player_name(): string
-    {
-        if (($this->current_player < 0) || ($this->current_player > sizeof($this->players))) {
+        if (($this->current_player < 0) || ($this->current_player > sizeof($this->players)))
+        {
             throw new OutOfBoundsException(
                 "Le numéro de joueur doit être compris entre 1 et " . sizeof($this->players)
             );
         }
 
-        return $this->players[$this->current_player]->name;
+        return $this->players[$this->current_player];
     }
 
     /**
@@ -140,10 +123,11 @@ class Game
      * @param int $round Nouveau numéro de round
      * @return void
      * @throws InvalidArgumentException Si le numéro de round est inférieur à 1 ou supérieur à 11
-    **/
+     **/
     public function set_current_round(int $round): void
     {
-        if (($round < 1) || ($round > 11)) {
+        if (($round < 1) || ($round > 11))
+        {
             throw new InvalidArgumentException("Le numéro de round doit être compris entre 1 et 11");
         }
 
@@ -158,7 +142,8 @@ class Game
      */
     public function set_current_player(int $player): void
     {
-        if ($player >= sizeof($this->players)) {
+        if ($player >= sizeof($this->players))
+        {
             $player = 1;
         }
 
@@ -170,7 +155,7 @@ class Game
      * @param Player $player
      * @return void
      * @throws InvalidArgumentException Exception levée si le joueur est déjà présent dans la partie
-    **/
+     **/
     public function add_player(Player $player): void
     {
         // Check if the parameter $player is the good class
@@ -187,13 +172,14 @@ class Game
      * @param int $id Joueur à récupérer
      * @return Player Joueur trouvé
      * @throws InvalidArgumentException Si $id dépasse les bornes du tableau
-    **/
+     **/
     public function get_player_at(int $id): Player
     {
         if (($id >= 0) && ($id < sizeof($this->players)))
         {
             return $this->players[$id];
-        } else {
+        } else
+        {
             throw new InvalidArgumentException("L'ID dépasse le nombre de joueurs présents");
         }
     }
@@ -205,5 +191,29 @@ class Game
     public function get_players(): array
     {
         return $this->players;
+    }
+
+    /**
+     * Fonction permettant de passer au joueur suivant.
+     * Tant que le numéro du round est inférieur ou égal à 10, on passe au joueur suivant.
+     * On fait cela pour tous les joueurs et on recommence jusqu'à atteindre 10 rounds.
+     * @return void
+     */
+    public function next_player(): void
+    {
+        if ($this->current_round <= 10)
+        {
+            $this->current_player++;
+
+            if ($this->current_player >= sizeof($this->players))
+            {
+                $this->current_player = 0;
+            } else
+            {
+
+                $this->current_throw = 1;
+            }
+            $this->current_round++;
+        }
     }
 }
