@@ -1,4 +1,5 @@
 <?php
+require_once "Game.php";
 require_once "Round.php";
 
 class Player
@@ -9,14 +10,14 @@ class Player
     public string $name;
 
     /**
-     * @var int Score du joueur
+     * @var int Score final du joueur
      **/
-    private int $score;
+    private int $score = 0;
 
     /**
-     * @var array Tableau de 10 objets Round : points remportés par le joueur
+     * @var array Tableau des points marqués par le joueur
      **/
-    private array $marked_points;
+    private array $scoreboard;
 
     /**
      * Constructeur de la classe Player
@@ -25,9 +26,65 @@ class Player
     public function __construct(string $name)
     {
         $this->name = $name;
-        $this->score = 0;
-        $this->marked_points[1] = new Round([0, 0]);
+        // Création d'un premier round, que l'on met à l'indice 1 du tableau des scores
+        $this->scoreboard[1] = new Round();
     }
+
+    /**
+     * Fonction permettant d'inscrire la valeur d'un lancer pour la mettre dans le numéro et le tour appropriés
+     * @param int $value Valeur du lancer à sauvegarder
+     * @param int $round_number Numéro du round (premier, deuxième, troisième, etc.) dans lequel on écrit la valeur
+     * @param int $throw_number Numéro du lancer (premier, deuxième, troisième) dans lequel on écrit la valeur
+     * @return void
+     * @throws OutOfBoundsException Exception levée si le numéro du round n'est pas compris entre 1 et Game::MAX_ROUNDS
+     **/
+    public function save_throw_value(int $value, int $round_number, int $throw_number): void
+    {
+        // Vérification que le numéro du tour soit cohérent
+        if ($round_number <= 0 || $round_number > Game::MAX_ROUNDS)
+        {
+            throw new OutOfBoundsException(
+                "Le numéro du tour doit être compris entre 1 et " . Game::MAX_ROUNDS . "(inclus)"
+            );
+        }
+
+        // Vérification que le numéro du lancer soit cohérent
+        if ($throw_number <= 0 || $throw_number > 3)
+        {
+            throw new OutOfBoundsException(
+                "Le numéro du lancer doit être compris entre 1 et " . Game::MAX_PIN . "(inclus)"
+            );
+        }
+
+        // Récupération de l'objet Round à l'emplacement désiré
+        /** @var Round $working_round */
+        $working_round = $this->scoreboard[$round_number];
+
+        if          ($throw_number === 1) { $working_round->set_first_throw   ($value);
+        } elseif    ($throw_number === 2) { $working_round->set_second_throw  ($value);
+        } elseif    ($throw_number === 3) { $working_round->set_third_throw   ($value);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * @param int $score Points à rajouter au joueur
@@ -54,18 +111,18 @@ class Player
     /**
      * @return array Tableau contenant les points marqués par le joueur
      */
-    public function get_marked_points(): array
+    public function get_scoreboard(): array
     {
-        return $this->marked_points;
+        return $this->scoreboard;
     }
 
     /**
      * @param array $round_data Tableau contenant les valeurs des lancers
      * @return void
      */
-    public function set_marked_points(array $round_data): void
+    public function set_scoreboard(array $round_data): void
     {
-        $this->marked_points[] = $round_data;
+        $this->scoreboard[] = $round_data;
     }
 
     /**
@@ -85,32 +142,12 @@ class Player
 
     public function did_spare_in_round(int $round): bool
     {
-        return $this->marked_points[$round]->get_first_throw() + $this->marked_points[$round]->get_second_throw() == 10;
+        return $this->scoreboard[$round]->get_first_throw() + $this->scoreboard[$round]->get_second_throw() === 10;
     }
 
-    /**
-     * Fonction permettant d'écrire la valeur d'un lancer pour la mettre dans le tableau
-     * @param int $value Valeur du lancer à écrire
-     * @param int $round_number Numéro du round (premier, deuxième, troisième, etc.) dans lequel on écrit la valeur
-     * @param int $throw_number Numéro du lancer (premier, deuxième, troisième) dans lequel on écrit la valeur
-     * @throws OutOfBoundsException Exception levée si le numéro du round n'est pas compris entre 1 et 10
-     * @return void
-    **/
-    public function save_throw_value(int $value, int $round_number, int $throw_number): void
+    public function did_strike_in_round(int $round): bool
     {
-        // Vérification que le numéro du tour soit cohérent
-        if ($round_number < 1 || $round_number > 10)
-        {
-            throw new OutOfBoundsException("Le numéro du tour doit être compris entre 1 et 10");
-        }
-
-        // Récupération de l'objet Round sur lequel on travaille pour plus de commodité
-        $working_round = $this->marked_points[$round_number];
-
-        if          ($throw_number == 1)   { $working_round->set_first_throw   ($value);
-        } elseif    ($throw_number == 2)   { $working_round->set_second_throw  ($value);
-        } elseif    ($throw_number == 3)   { $working_round->set_third_throw   ($value);
-        }
+        return $this->scoreboard[$round]->get_first_throw() == 10;
     }
 
     /**
@@ -120,35 +157,35 @@ class Player
     {
         $count = 0;
 
-        for ($i = 0; $i < count($this->marked_points); $i++)
+        for ($i = 0; $i < count($this->scoreboard); $i++)
         {
 
-            if ($this->marked_points[$i]->is_Strike() && $this->marked_points[$i]->get_turn() != 10)
+            if ($this->scoreboard[$i]->is_Strike() && $this->scoreboard[$i]->get_turn() != 10)
             {
-                $count += $this->marked_points[$i]->get_first_throw();
-                $count += $this->marked_points[$i]->get_second_throw();
-                $count += $this->marked_points[$i + 1]->get_first_throw();
-                $count += $this->marked_points[$i + 1]->get_second_throw();
-            } elseif ($this->marked_points[$i]->is_Spare() && $this->marked_points[$i]->get_turn() != 10)
+                $count += $this->scoreboard[$i]->get_first_throw();
+                $count += $this->scoreboard[$i]->get_second_throw();
+                $count += $this->scoreboard[$i + 1]->get_first_throw();
+                $count += $this->scoreboard[$i + 1]->get_second_throw();
+            } elseif ($this->scoreboard[$i]->is_Spare() && $this->scoreboard[$i]->get_turn() != 10)
             {
-                $count += $this->marked_points[$i]->get_first_throw();
-                $count += $this->marked_points[$i]->get_second_throw();
-                $count += $this->marked_points[$i + 1]->get_first_throw();
+                $count += $this->scoreboard[$i]->get_first_throw();
+                $count += $this->scoreboard[$i]->get_second_throw();
+                $count += $this->scoreboard[$i + 1]->get_first_throw();
 
-            } elseif ($this->marked_points[$i]->is_Strike() && $this->marked_points[$i]->get_turn() == 10)
+            } elseif ($this->scoreboard[$i]->is_Strike() && $this->scoreboard[$i]->get_turn() == 10)
             {
-                $count += $this->marked_points[$i]->get_first_throw();
-                $count += $this->marked_points[$i]->get_second_throw();
-                $count += $this->marked_points[$i]->get_third_throw();
-            } elseif ($this->marked_points[$i]->is_Spare() && $this->marked_points[$i]->get_turn() == 10)
+                $count += $this->scoreboard[$i]->get_first_throw();
+                $count += $this->scoreboard[$i]->get_second_throw();
+                $count += $this->scoreboard[$i]->get_third_throw();
+            } elseif ($this->scoreboard[$i]->is_Spare() && $this->scoreboard[$i]->get_turn() == 10)
             {
-                $count += $this->marked_points[$i]->get_first_throw();
-                $count += $this->marked_points[$i]->get_second_throw();
-                $count += $this->marked_points[$i]->get_third_throw();
+                $count += $this->scoreboard[$i]->get_first_throw();
+                $count += $this->scoreboard[$i]->get_second_throw();
+                $count += $this->scoreboard[$i]->get_third_throw();
             } else
             {
-                $count += $this->marked_points[$i]->get_first_throw();
-                $count += $this->marked_points[$i]->get_second_throw();
+                $count += $this->scoreboard[$i]->get_first_throw();
+                $count += $this->scoreboard[$i]->get_second_throw();
             }
         }
 
@@ -157,6 +194,6 @@ class Player
 
     public function new_round()
     {
-        $this->marked_points[] = new Round([0, 0]);
+        $this->scoreboard[] = new Round([0, 0]);
     }
 }

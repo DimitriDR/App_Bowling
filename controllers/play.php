@@ -22,17 +22,31 @@ if (!is_numeric($throw_value))
     header("Location: /play.php");
 }
 
-// Si on est dans le premier ou le deuxième lancer du joueur courant, on l'enregistre
-
-
+// Enregistrement du score
 $game->save_throw($throw_value);
 
 // La fonction `save_throw` ayant déjà incrémenté "current_throw", celle que l'on va récupérer le coup suivant
 $next_current_throw = $game->get_current_throw();
 
-if ($next_current_throw >= 3 || $throw_value == 10)
+// Avant le dernier round, toujours le même schéma
+if ($game->get_current_round() < 10)
 {
-    $game->next();
+    if ($next_current_throw >= 3 || $throw_value == 10)
+    {
+        $game->next();
+    }
+} else {
+    // Dans le dixième et dernier round
+    // On a un cas particulier si le joueur a fait un spare
+   if ($next_current_throw === 3) { // Si le prochain lancer est le troisième, on le passe si le joueur n'a fait ni un spare ni un strike
+       if (!($game->current_player_did_spare()) && !($game->current_player_did_strike()))
+       {
+           $game->next();
+       }
+   } elseif ($next_current_throw > 3) // Par contre, au-delà du troisième lancer, on passe forcément au joueur suivant
+   {
+       $game->next();
+   }
 }
 
 $_SESSION["game"] = serialize($game);

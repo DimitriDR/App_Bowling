@@ -2,6 +2,8 @@
 require_once "header.start_session.php";
 
 const REDIRECT_URL = "Location: /";
+const MIN_PLAYER_NUMBER = 1;
+const MAX_PLAYER_NUMBER = 20;
 
 if (!isset($_POST["submit"]))
 {
@@ -16,16 +18,16 @@ if (!is_numeric($_POST["player_number"]))
     header(REDIRECT_URL);
 }
 
-$player_number = (int)$_POST["player_number"];
+$player_number = (int) $_POST["player_number"];
 
 // Vérification du nombre de joueurs
-if ($player_number <= 0 || $player_number > 20)
+if ($player_number < MIN_PLAYER_NUMBER && $player_number > MAX_PLAYER_NUMBER)
 {
-    $_SESSION["error_message"] = "Le nombre de joueurs n'est pas compris dans les bornes prévues.";
+    $_SESSION["error_message"] = "Le nombre de joueurs doit être compris entre " . MIN_PLAYER_NUMBER . " et " . MAX_PLAYER_NUMBER .".";
     header(REDIRECT_URL);
 }
 
-// On stocke temporairement le nom nombre de joueurs dans la partie
+// On stocke temporairement le nombre de joueurs dans la partie
 // L'objet Game prendra le relai une fois que les noms auront été saisis
 $_SESSION["player_number"] = $player_number;
 
