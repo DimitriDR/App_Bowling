@@ -10,7 +10,7 @@ if (!isset($_POST["submit"]))
 }
 
 // Vérification que tous les champs soient passés un par un
-for ($i = 0; $i < $_SESSION["player_number"]; $i++)
+for ($i = 0 ; $i < $_SESSION["player_number"] ; $i++)
 {
     if (!(isset($_POST["player_name_" . $i])))
     {
@@ -31,19 +31,21 @@ if (isset($game_data["players"]))
 $players = array();
 
 // Si tous les champs sont OK, on crée un objet pour chacun des joueurs renseignés
-for ($j = 0; $j < $_SESSION["player_number"]; $j++)
+for ($j = 0 ; $j < $_SESSION["player_number"] ; $j++)
 {
     // Création du nouveau joueur que l'on va immédiatement rajouter dans le jeu
     $new_player = new Player($_POST["player_name_" . $j]);
     $players[] = $new_player;
 }
 
+// Enregistrement des joueurs
+$game = new Game($players);
+
 // Suppression de la variable comportant le nombre de joueurs
 // dans la session maintenant que l'instance Game va prendre le relai
 unset($_SESSION["player_number"]);
 
-$_SESSION["game"] = serialize(new Game($players));
+$_SESSION["game"] = serialize($game);
 
 header("Location: /play.php");
-
 exit(0);

@@ -19,13 +19,6 @@ class Round
      */
     private int $third_throw;
 
-    /**
-     * @var int Numéro du tour
-     * @note Le premier tour est le tour 1
-     * @note Le dernier tour est le tour 10
-     */
-    private int $turn;
-
     /***
      * Fonction permettant de savoir quel est le prochain lancer.
      * Par ordre croissant, si le numéro est à 0, alors le lancer n'a pas encore
@@ -56,33 +49,24 @@ class Round
      * @param int $turn Numéro du tour
      * @throws InvalidArgumentException Si le tableau contient plus de 3 valeurs
      */
-    public function __construct(array $round_data, int $turn)
+    public function __construct(array $round_data)
     {
-        if ($turn < 1 || $turn > 10)
-        {
-            throw new InvalidArgumentException("Le numéro de tour doit être compris entre 1 et 10");
-        }
-
-        if (count($round_data) > 2 && $turn != 10)
+        if (count($round_data) > 2)
         {
             throw new InvalidArgumentException("Le tableau contient plus de 2 valeurs pour un tour différent du 10");
         }
 
-        if (count($round_data) > 3 && $turn == 10)
+        if (count($round_data) > 3)
         {
             throw new InvalidArgumentException("Le tableau contient plus de 3 valeurs pour le tour 10");
         }
 
-        if ($turn == 10)
-        {
-            $this->third_throw = $round_data[2];
-        }
 
         //TODO: vérifier s'il est toujours pertinent de définir les valeurs selon les paramètres
         $this->first_throw = $round_data[0];
         $this->second_throw = $round_data[1];
         $this->third_throw = 0;
-        $this->turn = $turn;
+        // $this->turn = $turn;
     }
 
     /**

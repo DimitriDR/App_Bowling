@@ -1,4 +1,5 @@
 <?php
+require_once "Player.php";
 
 class Game
 {
@@ -52,7 +53,7 @@ class Game
      * @return void
      * @throws InvalidArgumentException Si la valeur du lancer est strictement inférieure à 0 ou supérieure à 10
      **/
-    public function register_throw(int $value_to_save): void
+    public function save_throw(int $value_to_save): void
     {
         // Vérification d'une valeur cohérente
         if (($value_to_save < 0) || ($value_to_save > 10))
@@ -60,12 +61,20 @@ class Game
             throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et 10");
         }
 
-        // On récupère le joueur actuel pour mettre la valeur du
-        // lancer dans le tableau des points marqués grâce à la fonction intégrée
+        // On récupère le joueur actuel pour mettre la valeur du lancer
+        // dans le tableau des points marqués grâce à la fonction intégrée
         $player = $this->get_current_player();
-        $player->set_thrown_value($value_to_save, $this->get_current_round());
+        $player->save_throw_value($value_to_save, $this->get_current_round(), $this->current_throw);
+
+        $this->current_throw++;
     }
 
+
+    public function current_player_did_spare(): bool
+    {
+        $player = $this->get_current_player();
+        return $player->get_marked_points()[$this->get_current_round()][1] === 10;
+    }
     /**
      * @return int Numéro du lancer actuel
      **/
@@ -117,6 +126,7 @@ class Game
 
         return $this->players[$this->current_player];
     }
+
 
     /**
      * Fonction pour mettre à jour le numéro du round actuel
@@ -208,12 +218,20 @@ class Game
             if ($this->current_player >= sizeof($this->players))
             {
                 $this->current_player = 0;
-            } else
+            }
+            else
             {
 
                 $this->current_throw = 1;
             }
-            $this->current_round++;
+
+            $this->get_current_player()->new_round();
         }
+    }
+
+    public function next_round()
+    {
+        $this->current_throw = 1;
+        $this->current_round++;
     }
 }

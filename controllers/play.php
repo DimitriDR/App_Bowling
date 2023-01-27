@@ -9,7 +9,9 @@ if (!isset($_POST["submit"]))
     header("Location: /");
 }
 
-$game = unserialize($_SESSION["game"]);
+/** Pour forcer l'IDE à connaître le type de la variable **/
+/* @var Game $game */
+$game = unserialize($_SESSION["game"], [Game::class]);
 
 $throw_value = $_POST["throw_value"];
 
@@ -20,18 +22,27 @@ if (!is_numeric($throw_value))
     header("Location: /play.php");
 }
 
-// Si on est dans le premier et le second lancer, on enregistre le score et on passe au lancer suivant
-if ($game->get_current_player()->get_next_throw_number($game->get_current_round()) <= 2)
-{
-    $game->register_throw($throw_value);
-} else {
-    if ($game->get_current_player()->get_marked_points()[$game->get_current_round()]->is_spare()) {
-        $game->register_throw($throw_value);
-    }
+// Si on est dans le premier ou le deuxième lancer du joueur courant, on l'enregistre
 
-    $game->next_player();
+$game->save_throw($throw_value);
+
+// La fonction `save_throw` ayant déjà incrémenté `current_throw`, celle que l'on va récupérer le coup suivant
+$next_current_throw = $game->get_current_throw();
+
+if ($next_current_throw === 3)
+{
+    if (!$game->get_current_player()->did_spare_in_round($game->get_current_round()))
+    {
+        $game->next_player();
+        $game->next_round();
+    }
 }
 
+if ($next_current_throw === 4)
+{
+    $game->next_player();
+    $game->next_round();
+}
 
 $_SESSION["game"] = serialize($game);
 
