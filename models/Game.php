@@ -5,25 +5,29 @@ class Game
 {
     /**
      * @var array Liste des joueurs présents dans la partie
-    **/
+     **/
     private array $players = [];
 
     /**
      * @var int Numéro du round actuel
-     * @note Le premier round est le round 1. Le dernier round est le round 10.
+     *
+     * Le premier round est le round 1. Le dernier round est le round 10.
      * Le round 11 est le round bonus : il est utilisé uniquement si le joueur fait un strike ou un spare au round 10
-     */
+     **/
     private int $current_round = 1;
 
     /**
      * @var int Numéro du joueur actuel
-     * @note Le premier joueur est le joueur 1. Le dernier joueur est le joueur sizeof($this->players)
+     *
+     * Le premier joueur est le joueur 0 (affiché 1 à l'utilisateur).
+     * Le dernier joueur est le joueur sizeof($this->players)
      **/
     private int $current_player = 0;
 
     /**
      * @var int Numéro du lancer actuel
-     * @note Le premier lancer est le lancer 1. Le dernier lancer est le lancer 2.
+     *
+     * Le premier lancer est le lancer 1. Le dernier lancer est le lancer 2.
      * Le lancer 3 est utilisé uniquement pour le dernier round
      * @note Si le joueur fait un strike, il n'a pas le droit au second lancer
      */
@@ -75,6 +79,7 @@ class Game
         $player = $this->get_current_player();
         return $player->get_marked_points()[$this->get_current_round()][1] === 10;
     }
+
     /**
      * @return int Numéro du lancer actuel
      **/
@@ -203,35 +208,29 @@ class Game
         return $this->players;
     }
 
-    /**
-     * Fonction permettant de passer au joueur suivant.
-     * Tant que le numéro du round est inférieur ou égal à 10, on passe au joueur suivant.
-     * On fait cela pour tous les joueurs et on recommence jusqu'à atteindre 10 rounds.
-     * @return void
-     */
-    public function next_player(): void
+
+    public function next(): void
     {
+        // Tant que le numéro du round est inférieur ou égal à 10, on passe au joueur suivant
         if ($this->current_round <= 10)
         {
             $this->current_player++;
 
+            // Si le numéro du joueur est supérieur au nombre de joueurs total, on revient au joueur 0
             if ($this->current_player >= sizeof($this->players))
             {
                 $this->current_player = 0;
-            }
-            else
-            {
-
+                $this->current_round++;
                 $this->current_throw = 1;
+                $this->get_current_player()->new_round();
+            } else // Sinon, on passe simplement au round suivant
+            {
+               $this->current_throw = 1;
+               if($this->current_round > 1)
+               {
+                   $this->get_current_player()->new_round();
+               }
             }
-
-            $this->get_current_player()->new_round();
         }
-    }
-
-    public function next_round()
-    {
-        $this->current_throw = 1;
-        $this->current_round++;
     }
 }

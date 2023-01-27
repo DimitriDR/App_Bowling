@@ -26,22 +26,19 @@ if (!is_numeric($throw_value))
 
 $game->save_throw($throw_value);
 
-// La fonction `save_throw` ayant déjà incrémenté `current_throw`, celle que l'on va récupérer le coup suivant
+// La fonction `save_throw` ayant déjà incrémenté "current_throw", celle que l'on va récupérer le coup suivant
 $next_current_throw = $game->get_current_throw();
 
 if ($next_current_throw === 3)
 {
     if (!$game->get_current_player()->did_spare_in_round($game->get_current_round()))
     {
-        $game->next_player();
-        $game->next_round();
+        $game->next();
     }
 }
 
-if ($next_current_throw === 4)
-{
-    $game->next_player();
-    $game->next_round();
+if($next_current_throw === 4) {
+    $game->next();
 }
 
 $_SESSION["game"] = serialize($game);

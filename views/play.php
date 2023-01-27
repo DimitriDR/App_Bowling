@@ -8,8 +8,8 @@ require_once dirname(__DIR__) . "/models/Player.php";
 $game = unserialize($_SESSION["game"]);
 
 echo "<pre>";
-print_r($game->get_current_throw() . "<br />");
-print_r($game->get_current_round() . "<br />");
+print_r("LANCER : " . $game->get_current_throw() . "<br />");
+print_r("TOUR : " . $game->get_current_round() . "<br />");
 echo "</pre>";
 
 echo "<br /><br />";
