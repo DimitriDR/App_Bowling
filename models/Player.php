@@ -1,5 +1,5 @@
 <?php
-require_once 'Round.php';
+require_once "Round.php";
 
 class Player
 {
@@ -26,17 +26,7 @@ class Player
     {
         $this->name = $name;
         $this->score = 0;
-        $this->marked_points = [1   => new Round([0, 0]     ,1),
-                                2   => new Round([0, 0]     ,2),
-                                3   => new Round([0, 0]     ,3),
-                                4   => new Round([0, 0]     ,4),
-                                5   => new Round([0, 0]     ,5),
-                                6   => new Round([0, 0]     ,6),
-                                7   => new Round([0, 0]     ,7),
-                                8   => new Round([0, 0]     ,8),
-                                9   => new Round([0, 0]     ,9),
-                                10  => new Round([0, 0, 0]  ,10)
-                               ];
+        $this->marked_points[1] = new Round([0, 0]);
     }
 
     /**
@@ -82,7 +72,7 @@ class Player
      * Fonction permettant
      * @param int $round
      * @return int
-    */
+
     public function get_next_throw_number(int $round): int {
         // Vérification cohérence du numéro du round
         if ($round < 1 || $round > 10)
@@ -91,16 +81,22 @@ class Player
         }
 
         return $this->marked_points[$round]->next_throw();
+    }*/
+
+    public function did_spare_in_round(int $round): bool
+    {
+        return $this->marked_points[$round]->get_first_throw() + $this->marked_points[$round]->get_second_throw() == 10;
     }
 
     /**
      * Fonction permettant d'écrire la valeur d'un lancer pour la mettre dans le tableau
      * @param int $value Valeur du lancer à écrire
-     * @param int $round_number Numéro du round (premier, deuxième, troisième, etc.)
+     * @param int $round_number Numéro du round (premier, deuxième, troisième, etc.) dans lequel on écrit la valeur
+     * @param int $throw_number Numéro du lancer (premier, deuxième, troisième) dans lequel on écrit la valeur
      * @throws OutOfBoundsException Exception levée si le numéro du round n'est pas compris entre 1 et 10
      * @return void
     **/
-    public function set_thrown_value(int $value, int $round_number): void
+    public function save_throw_value(int $value, int $round_number, int $throw_number): void
     {
         // Vérification que le numéro du tour soit cohérent
         if ($round_number < 1 || $round_number > 10)
@@ -110,11 +106,10 @@ class Player
 
         // Récupération de l'objet Round sur lequel on travaille pour plus de commodité
         $working_round = $this->marked_points[$round_number];
-        $next_throw_number = $this->get_next_throw_number($round_number);
 
-        if          ($next_throw_number == 1)   { $working_round->set_first_throw   ($value);
-        } elseif    ($next_throw_number == 2)   { $working_round->set_second_throw  ($value);
-        } elseif    ($next_throw_number == 3)   { $working_round->set_third_throw   ($value);
+        if          ($throw_number == 1)   { $working_round->set_first_throw   ($value);
+        } elseif    ($throw_number == 2)   { $working_round->set_second_throw  ($value);
+        } elseif    ($throw_number == 3)   { $working_round->set_third_throw   ($value);
         }
     }
 
@@ -158,5 +153,10 @@ class Player
         }
 
         return $count;
+    }
+
+    public function new_round()
+    {
+        $this->marked_points[] = new Round([0, 0]);
     }
 }
