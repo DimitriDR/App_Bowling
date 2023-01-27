@@ -34,6 +34,11 @@ class Game
     private int $current_throw = 1;
 
     /**
+     * @var int Nombre de rounds maximum
+     **/
+    public const MAX_ROUNDS = 10;
+
+    /**
      * Constructeur permettant d'intégrer directement une liste de joueurs
      * @param array $players Liste initiale des joueurs
      **/
@@ -211,26 +216,23 @@ class Game
 
     public function next(): void
     {
-        // Tant que le numéro du round est inférieur ou égal à 10, on passe au joueur suivant
-        if ($this->current_round <= 10)
-        {
-            $this->current_player++;
+        $this->current_player++;
 
-            // Si le numéro du joueur est supérieur au nombre de joueurs total, on revient au joueur 0
-            if ($this->current_player >= sizeof($this->players))
+        // Si le numéro du joueur est supérieur au nombre de joueurs total, on revient au joueur 0
+        if ($this->current_player >= sizeof($this->players))
+        {
+            $this->current_player = 0;
+            $this->current_round++;
+            $this->current_throw = 1;
+            $this->get_current_player()->new_round();
+        } else // Sinon, on passe simplement au round suivant
+        {
+            $this->current_throw = 1;
+            if ($this->current_round > 1)
             {
-                $this->current_player = 0;
-                $this->current_round++;
-                $this->current_throw = 1;
                 $this->get_current_player()->new_round();
-            } else // Sinon, on passe simplement au round suivant
-            {
-               $this->current_throw = 1;
-               if($this->current_round > 1)
-               {
-                   $this->get_current_player()->new_round();
-               }
             }
         }
     }
+
 }
