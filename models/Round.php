@@ -6,14 +6,14 @@ class Round
     /**
      * @var int Valeur du premier lancer
      **/
-    private int $first_throw = 0;
+    private int $first_throw = -1;
 
     /**
      * @var int Valeur du second lancer
      *
      * Si le joueur fait un strike, il n'a pas le droit au second lancer
      **/
-    private int $second_throw = 0;
+    private int $second_throw = -1;
 
     /**
      * @var int Valeur du troisième lancer
@@ -80,12 +80,6 @@ class Round
         }
 
         $this->second_throw = $throw_value;
-
-        // Erreur qui ne devrait en théorie jamais se produire...
-        if ($this->first_throw + $throw_value > 20)
-        {
-            throw new InvalidArgumentException("La somme des deux lancers ne peut pas être supérieure à 10");
-        }
     }
 
     /**

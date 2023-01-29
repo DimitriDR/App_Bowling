@@ -120,7 +120,7 @@ class Game
     public function current_player_did_spare(): bool
     {
         $player = $this->get_current_player();
-        return $player->get_scoreboard()[$this->get_current_round()]->get_first_throw() + $player->get_scoreboard()[$this->get_current_round()]->get_second_throw() === 10;
+        return $player->did_spare_in_round($this->get_current_round());
     }
 
     /**

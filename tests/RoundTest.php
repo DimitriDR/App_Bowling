@@ -1,66 +1,95 @@
 <?php
-require_once "models/Round.php";
+require_once dirname(__DIR__) . '/models/Round.php';
 
 use PHPUnit\Framework\TestCase;
 
 final class RoundTest extends TestCase
 {
-    public function testThrowsCorrectValues()
+    /**
+     * @covers Round::get_first_throw
+     * @covers Round::set_first_throw
+     *
+     **/
+    public function test__set_first_throw(): void
     {
-        $round = new Round([5, 0], 1);
-        $this->assertEquals(5, $round->get_first_throw());
-
-        $round->set_first_throw(10);
-        $this->assertEquals(10, $round->get_first_throw());
-
-        $round->set_first_throw(0);
-        $this->assertEquals(0, $round->get_first_throw());
-
-        $round->setSecondThrow(5);
-        $this->assertEquals(5, $round->get_second_throw());
-
-        $round->setSecondThrow(0);
-        $this->assertEquals(0, $round->get_second_throw());
-
-    }
-
-    public function testThrowsIncorrectValues()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $round = new Round([-1, 0], 1);
-
+        // Cas correct
         {
-            // On s'attend à une exception de type InvalidArgumentException
-            $this->expectException(InvalidArgumentException::class);
-            $round->set_first_throw(-1);
-
-            $this->expectException(InvalidArgumentException::class);
-            $round->setSecondThrow(-1);
-
+            $r = new Round();
+            $r->set_first_throw(5);
+            $this->assertEquals(5, $r->get_first_throw());
         }
 
+        // Cas retournant une exception
         {
-            // Idem, mais à la borne supérieure autorisée
             $this->expectException(InvalidArgumentException::class);
-            $round->set_first_throw(11);
+            $r = new Round();
+            $r->set_first_throw(-1);
 
             $this->expectException(InvalidArgumentException::class);
-            $round->get_second_throw(11);
+            $r->set_first_throw(11);
         }
     }
 
-    public function testIsStrike()
+    /**
+     * @covers Round::get_second_throw
+     * @covers Round::set_second_throw
+     *
+     **/
+    public function test__set_second_throw(): void
     {
-        $round = new Round([10, 0], 1);
-        $this->assertTrue($round->is_strike());
+        // Cas correct
+        {
+            $r = new Round();
+            $r->set_second_throw(5);
+            $this->assertEquals(5, $r->get_second_throw());
+        }
+
+        // Cas retournant une exception
+        {
+            $this->expectException(InvalidArgumentException::class);
+            $r_1 = new Round();
+            $r_1->set_second_throw(-1);
+
+            $r_2 = new Round();
+            $this->expectException(InvalidArgumentException::class);
+            $r_2->set_second_throw(11);
+        }
     }
 
-    public function testIsSpare()
+    /**
+     * @covers Round::get_third_throw
+     * @covers Round::set_third_throw
+     *
+     **/
+    public function test__set_third_throw(): void
     {
-        $round = new Round([5, 5], 1);
-        $this->assertTrue($round->is_spare());
+        // Cas correct
+        {
+            $r = new Round();
+            $r->set_first_throw(5);
+            $r->set_second_throw(5);
+            $r->set_third_throw(6);
 
-        $round = new Round([3, 7], 1);
-        $this->assertTrue($round->is_spare());
+            $this->assertEquals(6, $r->get_third_throw());
+        }
+
+        // Cas retournant une exception
+        {
+            // Cas où on veut définir le troisième lancer sans rien définir avant
+            {
+                $this->expectException(InvalidArgumentException::class);
+                $r = new Round();
+                $r->set_third_throw(-1);
+            }
+
+            // Cas où le joueur a bien fait deux lancers mais n'a pas fait de strike ou de spare
+            {
+                $this->expectException(InvalidArgumentException::class);
+                $r = new Round();
+                $r->set_first_throw(4);
+                $r->set_second_throw(3);
+                $r->set_third_throw(1);
+            }
+        }
     }
 }

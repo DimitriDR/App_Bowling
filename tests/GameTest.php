@@ -1,69 +1,111 @@
 <?php
-require_once "models/Game.php";
+require_once dirname(__DIR__) . "/models/Game.php";
 
 use PHPUnit\Framework\TestCase;
 
 class GameTest extends TestCase
 {
-    public function testConstructor()
+    private $short_valid_list_players;
+
+    public function __construct()
     {
-        $player_1 = new Player("Player 1");
-        $player_2 = new Player("Player 2");
-        $player_3 = new Player("Player 3");
-        $player_4 = new Player("Player 4");
-        $player_5 = new Player("Player 5");
-
-        $game = new Game([$player_1, $player_2, $player_3, $player_4, $player_5]);
-
-        $this->assertEquals($player_1, $game->get_player_at(0));
-        $this->assertEquals($player_2, $game->get_player_at(1));
-        $this->assertEquals($player_3, $game->get_player_at(2));
-        $this->assertEquals($player_4, $game->get_player_at(3));
-        $this->assertEquals($player_5, $game->get_player_at(4));
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->assertEquals($game->get_player_at(5));
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->assertEquals($game->get_player_at(-1));
+        parent::__construct();
+        $this->short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
     }
 
-    public function testAddPlayers()
+    /**
+     * @test
+     */
+    public function test__game_init(): void
     {
-        $player_1 = new Player("Player 1");
-        $player_2 = new Player("Player 2");
-        $player_3 = new Player("Player 3");
+        $players = array();
+        $players[] = new Player("Player 1");
+        $game = new Game($players);
 
-        $game = new Game([$player_1, $player_2]);
-
-        {
-            $this->assertEquals($player_1, $game->get_player_at(0));
-            $this->assertEquals($player_2, $game->get_player_at(1));
-
-            $this->expectException(InvalidArgumentException::class);
-            $this->assertEquals($player_3, $game->get_player_at(2));
-        }
-
-        {
-            $game->add_player($player_3);
-            $this->assertEquals($player_3, $game->get_player_at(2));
-        }
+        $this->assertEquals($players[0], $game->get_current_player());
+        $this->assertEquals(1, $game->get_current_round());
+        $this->assertEquals(1, $game->get_current_throw());
     }
 
-    public function testGameWithPlayerButItIsEmpty()
+    public function test__game_init_with_invalid_player(): void
     {
+        $players = array();
+        $players[] = new stdClass();
         $this->expectException(InvalidArgumentException::class);
-        new Game([]);
-
-        $this->expectException(InvalidArgumentException::class);
-        new Game([null]);
+        new Game($players);
     }
 
-    public function testCreatingNewGameWithPlayerButItIsNot()
+    public function test__save_throw(): void
     {
-        $round = new Round([10, 0], 1);
-        $this->expectException(InvalidArgumentException::class);
-        new Game([$round]);
+        $game = new Game($this->short_valid_list_players);
+        $game->save_throw(5);
+        $this->assertEquals(5, $game->get_current_player()->get_scoreboard()[1]->get_first_throw());
     }
 
+    public function test__save_throw_out_of_range(): void
+    {
+        $game = new Game($this->short_valid_list_players);
+        $this->expectException(InvalidArgumentException::class);
+        $game->save_throw(999);
+    }
+
+    public function test__current_player_did_spare(): void
+    {
+        $game = new Game($this->short_valid_list_players);
+        $game->save_throw(5);
+        $game->save_throw(5);
+        $this->assertTrue($game->current_player_did_spare());
+    }
+
+    public function test__current_player_did_strike(): void
+    {
+        $game = new Game($this->short_valid_list_players);
+        $game->save_throw(10);
+        $this->assertTrue($game->current_player_did_strike());
+    }
+
+    public function test__next(): void
+    {
+        $game = new Game([new Player("Player 1")]);
+        $game->save_throw(1);
+        $game->save_throw(1);
+
+        $game->next();
+
+        $this->assertEquals(2, $game->get_current_round());
+        $this->assertEquals(2, sizeof($game->get_current_player()->get_scoreboard()));
+    }
+
+    public function test__next__next_player(): void
+    {
+        $game = new Game($this->short_valid_list_players);
+        $game->save_throw(1);
+        $game->save_throw(1);
+
+        $game->next();
+
+        $this->assertEquals(1, $game->get_current_round());
+        $this->assertEquals($this->short_valid_list_players[1], $game->get_current_player());
+
+    }
+
+    public function test__next__next_player_above_2(): void
+    {
+        $game = new Game($this->short_valid_list_players);
+        $game->save_throw(1);
+        $game->save_throw(1);
+
+        $game->next();
+
+        $game->save_throw(1);
+        $game->save_throw(1);
+
+        $game->next();
+
+        $this->assertEquals(2, $game->get_current_round());
+        $this->assertEquals(2, sizeof($game->get_current_player()->get_scoreboard()));
+    }
 }

@@ -31,8 +31,16 @@ class Player
     }
 
     /**
+     * @return array Tableau contenant les points marqués par le joueur
+     */
+    public function get_scoreboard(): array
+    {
+        return $this->scoreboard;
+    }
+
+    /**
      * Fonction permettant d'inscrire la valeur d'un lancer pour la mettre dans le numéro et le tour appropriés
-     * @param int $value Valeur du lancer à sauvegarder
+     * @param int $value        Valeur du lancer à sauvegarder
      * @param int $round_number Numéro du round (premier, deuxième, troisième, etc.) dans lequel on écrit la valeur
      * @param int $throw_number Numéro du lancer (premier, deuxième, troisième) dans lequel on écrit la valeur
      * @return void
@@ -52,7 +60,7 @@ class Player
         if ($throw_number <= 0 || $throw_number > 3)
         {
             throw new OutOfBoundsException(
-                "Le numéro du lancer doit être compris entre 1 et " . Game::MAX_PIN . "(inclus)"
+                "Le numéro du lancer doit être compris entre 1 et 3 (inclus)"
             );
         }
 
@@ -60,140 +68,92 @@ class Player
         /** @var Round $working_round */
         $working_round = $this->scoreboard[$round_number];
 
-        if          ($throw_number === 1) { $working_round->set_first_throw   ($value);
-        } elseif    ($throw_number === 2) { $working_round->set_second_throw  ($value);
-        } elseif    ($throw_number === 3) { $working_round->set_third_throw   ($value);
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * @param int $score Points à rajouter au joueur
-     * @return void
-     */
-    public function add_score(int $score): void
-    {
-        if ($score < 0)
+        if ($throw_number === 1)
         {
-            throw new InvalidArgumentException("Le score ne peut pas être négatif");
+            $working_round->set_first_throw($value);
+        } elseif ($throw_number === 2)
+        {
+            $working_round->set_second_throw($value);
+        } elseif ($throw_number === 3)
+        {
+            $working_round->set_third_throw($value);
         }
-
-        $this->score += $score;
     }
 
     /**
-     * @return int Score du joueur
+     * Fonction permettant de savoir si le joueur a fait un spare dans n'importe quel round
+     * @param int $round Numéro du round dans lequel on veut savoir si le joueur a fait un spare (valeur entre 1 et 10)
+     * @return bool Vrai si le joueur a fait un spare, faux sinon
      */
-    public function get_score(): int
+    public function did_spare_in_round(int $round): bool
     {
-        return $this->score;
-    }
-
-    /**
-     * @return array Tableau contenant les points marqués par le joueur
-     */
-    public function get_scoreboard(): array
-    {
-        return $this->scoreboard;
-    }
-
-    /**
-     * @param array $round_data Tableau contenant les valeurs des lancers
-     * @return void
-     */
-    public function set_scoreboard(array $round_data): void
-    {
-        $this->scoreboard[] = $round_data;
-    }
-
-    /**
-     * Fonction permettant
-     * @param int $round
-     * @return int
-
-    public function get_next_throw_number(int $round): int {
-        // Vérification cohérence du numéro du round
         if ($round < 1 || $round > 10)
         {
             throw new OutOfBoundsException("Le numéro du round doit être compris entre 1 et 10");
         }
 
-        return $this->marked_points[$round]->next_throw();
-    }*/
-
-    public function did_spare_in_round(int $round): bool
-    {
         return $this->scoreboard[$round]->get_first_throw() + $this->scoreboard[$round]->get_second_throw() === 10;
     }
 
     public function did_strike_in_round(int $round): bool
     {
+        if ($round < 1 || $round > 10)
+        {
+            throw new OutOfBoundsException("Le numéro du round doit être compris entre 1 et 10");
+        }
+
         return $this->scoreboard[$round]->get_first_throw() == 10;
     }
 
     /**
-     * @return int Nombre de points marqués par le joueur
-     */
-    public function count_marked_points(): int
+     * Fonction permettant d'ajouter un nouveau round au tableau des scores
+     * @return void
+     **/
+    public function new_round(): void
     {
-        $count = 0;
+        $this->scoreboard[] = new Round();
+    }
 
-        for ($i = 0; $i < count($this->scoreboard); $i++)
+    /**
+     * Fonction permettant de calculer le score final du joueur
+     * @return int Nombre de points marqués par le joueur
+     **/
+    public function point_calculation(): int
+    {
+        $total = 0;
+
+        for ($i = 1 ; $i <= sizeof($this->scoreboard) ; $i++)
         {
+            if ($this->did_spare_in_round($i))
+            {
+                $total += 10;
 
-            if ($this->scoreboard[$i]->is_Strike() && $this->scoreboard[$i]->get_turn() != 10)
+                // Si ce n'est pas le dernier round, on va regarder le premier lancer du round suivant
+                if ($i < 10)
+                {
+                    $total += $this->scoreboard[$i + 1]->get_first_throw();
+                } else // Sinon, on regarde dans le troisième lancer
+                {
+                    $total += $this->scoreboard[$i]->get_third_throw();
+                }
+            } elseif ($this->did_strike_in_round($i))
             {
-                $count += $this->scoreboard[$i]->get_first_throw();
-                $count += $this->scoreboard[$i]->get_second_throw();
-                $count += $this->scoreboard[$i + 1]->get_first_throw();
-                $count += $this->scoreboard[$i + 1]->get_second_throw();
-            } elseif ($this->scoreboard[$i]->is_Spare() && $this->scoreboard[$i]->get_turn() != 10)
-            {
-                $count += $this->scoreboard[$i]->get_first_throw();
-                $count += $this->scoreboard[$i]->get_second_throw();
-                $count += $this->scoreboard[$i + 1]->get_first_throw();
+                $total += 10;
 
-            } elseif ($this->scoreboard[$i]->is_Strike() && $this->scoreboard[$i]->get_turn() == 10)
+                if ($i < 10) {
+                    $total += $this->scoreboard[$i + 1]->get_first_throw();
+                    $total += $this->scoreboard[$i + 1]->get_second_throw();
+                } else {
+                    $total += $this->scoreboard[$i]->get_second_throw();
+                    $total += $this->scoreboard[$i]->get_third_throw();
+                }
+            } else // Si le joueur n'a pas fait de spare, alors on ne fait qu'additionner les points
             {
-                $count += $this->scoreboard[$i]->get_first_throw();
-                $count += $this->scoreboard[$i]->get_second_throw();
-                $count += $this->scoreboard[$i]->get_third_throw();
-            } elseif ($this->scoreboard[$i]->is_Spare() && $this->scoreboard[$i]->get_turn() == 10)
-            {
-                $count += $this->scoreboard[$i]->get_first_throw();
-                $count += $this->scoreboard[$i]->get_second_throw();
-                $count += $this->scoreboard[$i]->get_third_throw();
-            } else
-            {
-                $count += $this->scoreboard[$i]->get_first_throw();
-                $count += $this->scoreboard[$i]->get_second_throw();
+                $total += $this->scoreboard[$i]->get_first_throw();
+                $total += $this->scoreboard[$i]->get_second_throw();
             }
         }
 
-        return $count;
-    }
-
-    public function new_round()
-    {
-        $this->scoreboard[] = new Round([0, 0]);
+        return $total;
     }
 }
