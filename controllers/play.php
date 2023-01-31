@@ -29,7 +29,7 @@ $game->save_throw($throw_value);
 $next_current_throw = $game->get_current_throw();
 
 // Avant le dernier round, toujours le même schéma
-if ($game->get_current_round() < 10)
+if ($game->get_current_round() < $game->get_rounds())
 {
     if ($next_current_throw >= 3 || $throw_value == 10)
     {

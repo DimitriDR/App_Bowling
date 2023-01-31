@@ -12,13 +12,20 @@ if (!isset($_POST["submit"]))
 }
 
 // Vérification du type de la variable donnée
-if (!is_numeric($_POST["player_number"]))
+if (!is_numeric($_POST["player_number"]) )
+{
+    $_SESSION["error_message"] = "Le champ saisi n'est pas un nombre entier.";
+    header(REDIRECT_URL);
+}
+
+if(!is_numeric($_POST["rounds"]))
 {
     $_SESSION["error_message"] = "Le champ saisi n'est pas un nombre entier.";
     header(REDIRECT_URL);
 }
 
 $player_number = (int) $_POST["player_number"];
+$rounds = (int) $_POST["rounds"];
 
 // Vérification du nombre de joueurs
 if ($player_number < MIN_PLAYER_NUMBER && $player_number > MAX_PLAYER_NUMBER)
@@ -27,9 +34,10 @@ if ($player_number < MIN_PLAYER_NUMBER && $player_number > MAX_PLAYER_NUMBER)
     header(REDIRECT_URL);
 }
 
-// On stocke temporairement le nombre de joueurs dans la partie
+// On stocke temporairement le nombre de joueurs dans la partie, ainsi que le nombre de rounds
 // L'objet Game prendra le relai une fois que les noms auront été saisis
 $_SESSION["player_number"] = $player_number;
+$_SESSION["rounds"] = $rounds;
 
 header("Location: /player_name.php");
 exit(0);

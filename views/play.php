@@ -21,7 +21,7 @@ echo "</pre>";
 $current_round = $game->get_current_round();
 $current_player = $game->get_current_player();
 
-if ($game->get_current_round() > $game::MAX_ROUNDS)
+if ($game->get_current_round() > $game->get_rounds())
 {
     header("Location: /end.php");
     exit(0);

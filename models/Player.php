@@ -49,10 +49,10 @@ class Player
     public function save_throw_value(int $value, int $round_number, int $throw_number): void
     {
         // Vérification que le numéro du tour soit cohérent
-        if ($round_number <= 0 || $round_number > Game::MAX_ROUNDS)
+        if ($round_number <= 0 || $round_number > GAME::MAX_ROUNDS)
         {
             throw new OutOfBoundsException(
-                "Le numéro du tour doit être compris entre 1 et " . Game::MAX_ROUNDS . "(inclus)"
+                "Le numéro du tour doit être compris entre 1 et " . GAME::MAX_ROUNDS . "(inclus)"
             );
         }
 
@@ -89,7 +89,7 @@ class Player
     {
         if ($round < 1 || $round > 10)
         {
-            throw new OutOfBoundsException("Le numéro du round doit être compris entre 1 et 10");
+            throw new OutOfBoundsException("Le numéro du tour doit être compris entre 1 et " . GAME::MAX_ROUNDS . ".");
         }
 
         return $this->scoreboard[$round]->get_first_throw() + $this->scoreboard[$round]->get_second_throw() === 10;
@@ -99,7 +99,7 @@ class Player
     {
         if ($round < 1 || $round > 10)
         {
-            throw new OutOfBoundsException("Le numéro du round doit être compris entre 1 et 10");
+            throw new OutOfBoundsException("Le numéro du tour doit être compris entre 1 et " . GAME::get_rounds() . ".");
         }
 
         return $this->scoreboard[$round]->get_first_throw() == 10;
@@ -129,7 +129,7 @@ class Player
                 $total += 10;
 
                 // Si ce n'est pas le dernier round, on va regarder le premier lancer du round suivant
-                if ($i < 10)
+                if ($i < GAME::get_rounds())
                 {
                     $total += $this->scoreboard[$i + 1]->get_first_throw();
                 } else // Sinon, on regarde dans le troisième lancer
