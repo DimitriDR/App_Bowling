@@ -68,7 +68,6 @@ class Game
 
         $this->players  = $players;
         $this->rounds   = $rounds;
-        $this->MAX_PIN  = $pin_number;
     }
 
     /**
