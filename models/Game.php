@@ -51,11 +51,11 @@ class Game
     /**
      * Constructeur permettant d'intégrer directement une liste de joueurs
      *
-     * @param array $players Liste des joueurs présents dans la partie
-     * @param int $rounds Nombre de tours de la partie choisie par le joueur
+     * @param array $players    Liste des joueurs présents dans la partie
+     * @param int $rounds       Nombre de tours de la partie choisie par le joueur
      * @throws InvalidArgumentException Si un des joueurs n'est pas une instance de la classe Player
      **/
-    public function __construct(array $players, int $rounds)
+    public function __construct(array $players, int $rounds, int $pin_number)
     {
         // On parcourt tous les joueurs pour vérifier qu'ils sont bien des instances de la classe Player
         foreach ($players as $player)
@@ -66,8 +66,9 @@ class Game
             }
         }
 
-        $this->players = $players;
-        $this->rounds = $rounds;
+        $this->players  = $players;
+        $this->rounds   = $rounds;
+        $this->MAX_PIN  = $pin_number;
     }
 
     /**
@@ -146,7 +147,7 @@ class Game
     public function current_player_did_strike(): bool
     {
         $player = $this->get_current_player();
-        return $player->get_scoreboard()[$this->get_current_round()]->get_first_throw() === 10;
+        return $player->get_scoreboard()[$this->get_current_round()]->get_first_throw() === Game::MAX_PIN;
     }
 
     /**

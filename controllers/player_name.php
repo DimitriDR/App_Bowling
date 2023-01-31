@@ -32,12 +32,13 @@ for ($j = 0 ; $j < $_SESSION["player_number"] ; $j++)
 }
 
 // Création du jeu auquel on y ajoute directement les joueurs
-$game = new Game($players, $_SESSION["rounds"]);
+$game = new Game($players, $_SESSION["rounds"], $_SESSION["pin_number"]);
 
 // Suppression de la variable comportant le nombre de joueurs, ainsi que le nombre de rounds
 // dans la session maintenant que l'instance Game va prendre le relai
 unset($_SESSION["player_number"]);
 unset($_SESSION["rounds"]);
+unset($_SESSION["pin_number"]);
 
 $_SESSION["game"] = serialize($game);
 

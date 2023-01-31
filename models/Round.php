@@ -52,8 +52,8 @@ class Round
     /**
      * Mutateur pour le premier lancer
      *
-     * @param int $throw_value Valeur du premier lancer comprises en 0 et 10
-     * @throws InvalidArgumentException Exception levée si la valeur du lancer n'est pas comprise dans l'intervalle [0, 10]
+     * @param int $throw_value Valeur du premier lancer comprises en 0 et Game::MAX_PIN
+     * @throws InvalidArgumentException Exception levée si la valeur du lancer n'est pas comprise dans l'intervalle [0, Game::MAX_PIN]
     **/
     public function set_first_throw(int $throw_value): void
     {
@@ -68,8 +68,8 @@ class Round
     /**
      * Mutateur pour le deuxième lancer
      *
-     * @param int $throw_value Valeur du deuxième lancer comprises en 0 et 10
-     * @throws InvalidArgumentException Exception levée si la valeur du lancer n'est pas comprise dans l'intervalle [0, 10]
+     * @param int $throw_value Valeur du deuxième lancer comprises en 0 et Game::MAX_PIN
+     * @throws InvalidArgumentException Exception levée si la valeur du lancer n'est pas comprise dans l'intervalle [0, Game::MAX_PIN]
      * @throws LogicException Exception levée si on veut définir une valeur alors que le joueur a fait un strike au premier lancer
      **/
     public function set_second_throw(int $throw_value): void
@@ -85,8 +85,8 @@ class Round
     /**
      * Mutateur pour le troisième lancer
      *
-     * @param int $throw_value Valeur du deuxième lancer comprises en 0 et 10
-     * @throws InvalidArgumentException Exception levée si la valeur du lancer n'est pas comprise dans l'intervalle [0, 10]
+     * @param int $throw_value Valeur du deuxième lancer comprises en 0 et Game::MAX_PIN
+     * @throws InvalidArgumentException Exception levée si la valeur du lancer n'est pas comprise dans l'intervalle [0,Game::MAX_PIN]
      **/
     public function set_third_throw(int $throw_value): void
     {
@@ -95,7 +95,7 @@ class Round
             throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et " . Game::MAX_PIN . " inclus");
         }
 
-        if ($this->first_throw + $this->second_throw < 10)
+        if ($this->first_throw + $this->second_throw < Game::MAX_PIN) 
         {
             throw new InvalidArgumentException(
                 "Le troisième lancer n'est utilisé que si le joueur a fait un strike ou spare"

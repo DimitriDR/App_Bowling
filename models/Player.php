@@ -92,7 +92,7 @@ class Player
             throw new OutOfBoundsException("Le numéro du tour doit être compris entre 1 et " . GAME::MAX_ROUNDS . ".");
         }
 
-        return $this->scoreboard[$round]->get_first_throw() + $this->scoreboard[$round]->get_second_throw() === 10;
+        return $this->scoreboard[$round]->get_first_throw() + $this->scoreboard[$round]->get_second_throw() === Game::MAX_PIN;
     }
 
     public function did_strike_in_round(int $round): bool
@@ -102,7 +102,7 @@ class Player
             throw new OutOfBoundsException("Le numéro du tour doit être compris entre 1 et " . GAME::MAX_ROUNDS . ".");
         }
 
-        return $this->scoreboard[$round]->get_first_throw() == 10;
+        return $this->scoreboard[$round]->get_first_throw() == Game::MAX_PIN;
     }
 
     /**
@@ -126,7 +126,7 @@ class Player
         {
             if ($this->did_spare_in_round($i))
             {
-                $total += 10;
+                $total += Game::MAX_PIN;
 
                 // Si ce n'est pas le dernier round, on va regarder le premier lancer du round suivant
                 if ($i < GAME::MAX_ROUNDS)
@@ -138,7 +138,7 @@ class Player
                 }
             } elseif ($this->did_strike_in_round($i))
             {
-                $total += 10;
+                $total += Game::MAX_PIN;
 
                 if ($i < 10) {
                     $total += $this->scoreboard[$i + 1]->get_first_throw();
