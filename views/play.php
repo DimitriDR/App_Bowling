@@ -7,17 +7,6 @@ require_once dirname(__DIR__) . "/models/Player.php";
 /** @var Game $game */
 $game = unserialize($_SESSION["game"]);
 
-echo "<pre>";
-print_r("LANCER : " . $game->get_current_throw() . "<br />");
-print_r("TOUR : " . $game->get_current_round() . "<br />");
-echo "</pre>";
-
-echo "<br /><br />";
-
-echo "<pre>";
-print_r($game->get_current_player());
-echo "</pre>";
-
 $current_round = $game->get_current_round();
 $current_player = $game->get_current_player();
 
