@@ -95,7 +95,7 @@ class Round
             throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et " . Game::MAX_PIN . " inclus");
         }
 
-        if ($this->first_throw + $this->second_throw < Game::MAX_PIN) 
+        if ($this->first_throw + $this->second_throw < Game::MAX_ROUNDS*2)
         {
             throw new InvalidArgumentException(
                 "Le troisième lancer n'est utilisé que si le joueur a fait un strike ou spare"
