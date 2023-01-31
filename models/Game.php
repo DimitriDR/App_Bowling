@@ -34,8 +34,13 @@ class Game
     private int $current_throw = 1;
 
     /**
-     * @var int Nombre de rounds maximum
-     **/
+     * @var int Nombre de tours de la partie choisie par le joueur
+     */
+    private int $rounds;
+
+    /**
+     * @var int Nombre maximum de tours dans une partie
+     */
     public const MAX_ROUNDS = 10;
 
     /**
@@ -46,10 +51,11 @@ class Game
     /**
      * Constructeur permettant d'intégrer directement une liste de joueurs
      *
-     * @param array $players Liste initiale des joueurs
+     * @param array $players Liste des joueurs présents dans la partie
+     * @param int $rounds Nombre de tours de la partie choisie par le joueur
      * @throws InvalidArgumentException Si un des joueurs n'est pas une instance de la classe Player
      **/
-    public function __construct(array $players)
+    public function __construct(array $players, int $rounds)
     {
         // On parcourt tous les joueurs pour vérifier qu'ils sont bien des instances de la classe Player
         foreach ($players as $player)
@@ -61,6 +67,16 @@ class Game
         }
 
         $this->players = $players;
+        $this->rounds = $rounds;
+    }
+
+    /**
+     * Accesseur permettant de récupérer le nombre de tours de la partie
+     * @return int Nombre de tours de la partie
+     **/
+    public function get_rounds(): int
+    {
+        return $this->rounds;
     }
 
     /**

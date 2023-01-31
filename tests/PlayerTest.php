@@ -5,6 +5,8 @@ use PHPUnit\Framework\TestCase;
 
 class PlayerTest extends TestCase
 {
+    private const NUMBER_OF_ROUNDS = 10;
+
     /**
      * Test du constructeur de la classe Player
      * @return void
@@ -85,7 +87,7 @@ class PlayerTest extends TestCase
 
     public function test__compute_points_one_round(): void
     {
-        $g = new Game([new Player("John Doe")]);
+        $g = new Game([new Player("John Doe")], self::NUMBER_OF_ROUNDS);
         $g->save_throw(1);
         $g->save_throw(6);
 
@@ -96,7 +98,7 @@ class PlayerTest extends TestCase
 
     public function test__compute_points_spare(): void
     {
-        $g = new Game([new Player("John Doe")]);
+        $g = new Game([new Player("John Doe")], self::NUMBER_OF_ROUNDS);
         $g->save_throw(5);
         $g->save_throw(5);
 
@@ -112,7 +114,7 @@ class PlayerTest extends TestCase
 
     public function test__compute_points_spare_2(): void
     {
-        $g = new Game([new Player("John Doe")]);
+        $g = new Game([new Player("John Doe")], self::NUMBER_OF_ROUNDS);
         $g->save_throw(5);
         $g->save_throw(5);
 
@@ -128,7 +130,7 @@ class PlayerTest extends TestCase
 
     public function test__compute_points_strike(): void
     {
-        $g = new Game([new Player("John Doe")]);
+        $g = new Game([new Player("John Doe")], self::NUMBER_OF_ROUNDS);
         $g->save_throw(10);
 
         $g->next();
@@ -143,7 +145,7 @@ class PlayerTest extends TestCase
 
     public function test__compute_points_strike_near_end(): void
     {
-        $g = new Game([new Player("John Doe")]);
+        $g = new Game([new Player("John Doe")], self::NUMBER_OF_ROUNDS);
 
         // On triche un peu pour remplir uniquement le dernier round
         for ($i = 0; $i < 9; $i++) {
@@ -163,7 +165,7 @@ class PlayerTest extends TestCase
 
     public function test__compute_points_spare_near_end(): void
     {
-        $g = new Game([new Player("John Doe")]);
+        $g = new Game([new Player("John Doe")], self::NUMBER_OF_ROUNDS);
 
         // On triche un peu pour remplir uniquement le dernier round
         for ($i = 0; $i < 9; $i++) {
