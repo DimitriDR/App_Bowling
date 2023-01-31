@@ -49,7 +49,7 @@ class Game
      * @param array $players Liste initiale des joueurs
      * @throws InvalidArgumentException Si un des joueurs n'est pas une instance de la classe Player
      **/
-    public function __construct(array $players)
+    public function __construct(array $players, int $pin_number)
     {
         // On parcourt tous les joueurs pour vérifier qu'ils sont bien des instances de la classe Player
         foreach ($players as $player)
@@ -61,6 +61,7 @@ class Game
         }
 
         $this->players = $players;
+        $this->MAX_PIN = $pin_number;
     }
 
     /**
@@ -130,7 +131,7 @@ class Game
     public function current_player_did_strike(): bool
     {
         $player = $this->get_current_player();
-        return $player->get_scoreboard()[$this->get_current_round()]->get_first_throw() === 10;
+        return $player->get_scoreboard()[$this->get_current_round()]->get_first_throw() === MAX_PIN;
     }
 
     /**
