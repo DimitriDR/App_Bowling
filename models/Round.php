@@ -20,7 +20,7 @@ class Round
      *
      * Cette variable a une valeur quand le joueur fait un strike ou un spare au dernier tour
      **/
-    private int $third_throw = 0;
+    private int $third_throw = -1;
 
     /**
      * Assesseur pour la valeur du premier lancer
@@ -57,11 +57,6 @@ class Round
     **/
     public function set_first_throw(int $throw_value): void
     {
-        if ($throw_value < 0 || $throw_value > Game::MAX_PIN)
-        {
-            throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et " . Game::MAX_PIN . " inclus");
-        }
-
         $this->first_throw = $throw_value;
     }
 
@@ -74,11 +69,6 @@ class Round
      **/
     public function set_second_throw(int $throw_value): void
     {
-        if ($throw_value < 0 || $throw_value > Game::MAX_PIN)
-        {
-            throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et " . Game::MAX_PIN . " inclus");
-        }
-
         $this->second_throw = $throw_value;
     }
 
@@ -90,11 +80,6 @@ class Round
      **/
     public function set_third_throw(int $throw_value): void
     {
-        if ($throw_value < 0 || $throw_value > Game::MAX_PIN)
-        {
-            throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et " . Game::MAX_PIN . " inclus");
-        }
-
         $this->third_throw = $throw_value;
     }
 }

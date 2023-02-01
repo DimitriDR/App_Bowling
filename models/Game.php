@@ -39,14 +39,9 @@ class Game
     private int $rounds;
 
     /**
-     * @var int Nombre maximum de tours dans une partie
-     */
-    public const MAX_ROUNDS = 10;
-
-    /**
-     * @var int Nombre maximum de quilles dans le jeu
-     **/
-    public const MAX_PIN = 10;
+     * @var int Nombre de quilles dans le jeu
+    **/
+    private int $pins;
 
     /**
      * Constructeur permettant d'intégrer directement une liste de joueurs
@@ -68,6 +63,7 @@ class Game
 
         $this->players  = $players;
         $this->rounds   = $rounds;
+        $this->pins     = $pin_number;
     }
 
     /**
@@ -107,6 +103,15 @@ class Game
     }
 
     /**
+     * Accesseur pour récupérer le nombre de quilles
+     * @return int Nombre de quilles
+     */
+    public function get_pins(): int
+    {
+        return $this->pins;
+    }
+
+    /**
      * Fonction permettant d'enregistrer la valeur du lancer dans le joueur actuel et le round actuel
      *
      * @param int $value_to_save Valeur du lancer (entre 0 et MAX_PIN)
@@ -116,9 +121,9 @@ class Game
     public function save_throw(int $value_to_save): void
     {
         // Vérification que la valeur donnée soit cohérente
-        if ($value_to_save < 0 || $value_to_save > self::MAX_PIN)
+        if ($value_to_save < 0 || $value_to_save > $this->pins)
         {
-            throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et " . self::MAX_PIN);
+            throw new InvalidArgumentException("La valeur du lancer doit être comprise entre 0 et " . $this->pins);
         }
 
         // On récupère le joueur actuel pour mettre la valeur du lancer
@@ -135,8 +140,10 @@ class Game
      **/
     public function current_player_did_spare(): bool
     {
-        $player = $this->get_current_player();
-        return $player->did_spare_in_round($this->get_current_round());
+        $current_player = $this->players[$this->current_player];
+        $current_round  = $this->get_current_round();
+
+        return $this->player_did_spare_in_round($current_player, $current_round);
     }
 
     /**
@@ -145,8 +152,55 @@ class Game
      **/
     public function current_player_did_strike(): bool
     {
+        return $this->current_player_did_strike_in_round($this->get_current_round());
+    }
+
+    /**
+     * Fonction permettant de savoir si un joueur a fait un strike dans un round donné.
+     * @param Player $p Nom du joueur dont on veut savoir s'il a fait un strike
+     * @param int $round_number Numéro du round dans lequel on veut savoir si le joueur a fait un strike
+     * @return bool Vrai si le joueur a fait un strike, faux sinon.
+    **/
+    private function player_did_strike_in_round(Player $p, int $round_number): bool
+    {
+        if ($round_number < 1 || $round_number > $this->rounds)
+        {
+            throw new OutOfBoundsException("Le numéro du tour doit être compris entre 1 et " . $this->rounds . ".");
+        }
+
+        return $p->get_scoreboard()[$round_number]->get_first_throw() === $this->pins;
+    }
+
+    /**
+     * Fonction permettant de savoir si un joueur a fait un spare dans un round donné.
+     * @param Player $p Nom du joueur dont on veut savoir s'il a fait un spare
+     * @param int $round_number Numéro du round dans lequel on veut savoir si le joueur a fait un spare
+     * @return bool Vrai si le joueur a fait un spare, faux sinon.
+    **/
+    private function player_did_spare_in_round(Player $p, int $round_number): bool
+    {
+        if ($round_number < 1 || $round_number > $this->rounds)
+        {
+            throw new OutOfBoundsException("Le numéro du tour doit être compris entre 1 et " . $this->rounds . ".");
+        }
+
+        return $p->get_scoreboard()[$round_number]->get_first_throw() +  $p->get_scoreboard()[$round_number]->get_second_throw() === $this->pins;
+    }
+
+    /**
+     * Fonction permettant de savoir si le joueur courant a fait un strike dans le round donné.
+     * @param int $round_number Numéro du round dans lequel on veut savoir si le joueur a fait un strike
+     * @return bool Vrai si le joueur a fait un strike, faux sinon.
+    **/
+    private function current_player_did_strike_in_round(int $round_number): bool
+    {
         $player = $this->get_current_player();
-        return $player->get_scoreboard()[$this->get_current_round()]->get_first_throw() === Game::MAX_PIN;
+        if ($round_number < 1 || $round_number > $this->rounds)
+        {
+            throw new OutOfBoundsException("Le numéro du tour doit être compris entre 1 et " . $this->rounds . ".");
+        }
+
+        return $player->get_scoreboard()[$round_number]->get_first_throw() === $this->pins;
     }
 
     /**
@@ -154,7 +208,7 @@ class Game
      * selon le cas. Elle incrémente d'un round quand tous les joueurs ont joué le round en question. Sinon,
      * elle donne la main au joueur suivant en incrémentant la variable du joueur courant.
      * @return void
-     */
+    **/
     public function next(): void
     {
         $this->current_player++;
@@ -180,4 +234,46 @@ class Game
         }
     }
 
+    /**
+     * Fonction permettant de calculer le score final du joueur
+     * @return int Nombre de points marqués par le joueur
+     **/
+    public function point_calculation(Player $p): int
+    {
+        $total = 0;
+
+        for ($i = 1 ; $i <= sizeof($p->get_scoreboard()) ; $i++)
+        {
+            if ($this->player_did_spare_in_round($p, $i))
+            {
+                $total += $this->pins;
+
+                // Si ce n'est pas le dernier round, on va regarder le premier lancer du round suivant
+                if ($i < $this->rounds)
+                {
+                    $total += $p->get_first_throw_score($i+1);
+                } else // Sinon, on regarde dans le troisième lancer
+                {
+                    $total += $p->get_third_throw_score($i);
+                }
+            } elseif ($this->player_did_strike_in_round($p, $i))
+            {
+                $total += $this->pins;
+
+                if ($i < 10) {
+                    $total += $p->get_first_throw_score($i+1);
+                    $total += $p->get_second_throw_score($i+1);
+                } else {
+                    $total += $p->get_second_throw_score($i);
+                    $total += $p->get_third_throw_score($i);
+                }
+            } else // Si le joueur n'a pas fait de spare, alors on ne fait qu'additionner les points
+            {
+                $total += $p->get_first_throw_score($i);
+                $total += $p->get_second_throw_score($i);
+            }
+        }
+
+        return $total;
+    }
 }

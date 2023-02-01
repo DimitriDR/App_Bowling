@@ -111,5 +111,103 @@ class GameTest extends TestCase
         $this->assertEquals(2, sizeof($game->get_current_player()->get_scoreboard()));
     }
 
+    public function test__compute_points_one_round(): void
+    {
+        $g = new Game([new Player("John Doe")], self::NUMBER_OF_ROUNDS, self::NUMBER_OF_PINS);
+        $g->save_throw(1);
+        $g->save_throw(6);
+
+        $p = $g->get_current_player();
+
+        $this->assertEquals(7, $g->point_calculation($p));
+    }
+
+    public function test__compute_points_spare(): void
+    {
+        $g = new Game([new Player("John Doe")], self::NUMBER_OF_ROUNDS, self::NUMBER_OF_PINS);
+        $g->save_throw(5);
+        $g->save_throw(5);
+
+        $g->next();
+
+        $g->save_throw(6);
+        $g->save_throw(2);
+
+        $p = $g->get_current_player();
+
+        $this->assertEquals(24, $g->point_calculation($p));
+    }
+
+    public function test__compute_points_spare_2(): void
+    {
+        $g = new Game([new Player("John Doe")], self::NUMBER_OF_ROUNDS, self::NUMBER_OF_PINS);
+        $g->save_throw(5);
+        $g->save_throw(5);
+
+        $g->next();
+
+        $g->save_throw(3);
+        $g->save_throw(2);
+
+        $p = $g->get_current_player();
+
+        $this->assertEquals(18, $g->point_calculation($p));
+    }
+
+    public function test__compute_points_strike(): void
+    {
+        $g = new Game([new Player("John Doe")], self::NUMBER_OF_ROUNDS, self::NUMBER_OF_PINS);
+        $g->save_throw(10);
+
+        $g->next();
+
+        $g->save_throw(5);
+        $g->save_throw(4);
+
+        $p = $g->get_current_player();
+
+        $this->assertEquals(28, $g->point_calculation($p));
+    }
+
+    public function test__compute_points_strike_near_end(): void
+    {
+        $g = new Game([new Player("John Doe")], self::NUMBER_OF_ROUNDS, self::NUMBER_OF_PINS);
+
+        // On triche un peu pour remplir uniquement le dernier round
+        for ($i = 0; $i < 9; $i++) {
+            $g->save_throw(2);
+            $g->save_throw(2);
+            $g->next();
+        }
+
+        $g->save_throw(10);
+        $g->save_throw(5);
+        $g->save_throw(4);
+
+        $p = $g->get_current_player();
+
+        $this->assertEquals(55, $g->point_calculation($p));
+    }
+
+    public function test__compute_points_spare_near_end(): void
+    {
+        $g = new Game([new Player("John Doe")], self::NUMBER_OF_ROUNDS, self::NUMBER_OF_PINS);
+
+        // On triche un peu pour remplir uniquement le dernier round
+        for ($i = 0; $i < 9; $i++) {
+            $g->save_throw(2);
+            $g->save_throw(2);
+            $g->next();
+        }
+
+        $g->save_throw(5);
+        $g->save_throw(5);
+        $g->save_throw(4);
+
+        $p = $g->get_current_player();
+
+        $this->assertEquals(50, $g->point_calculation($p));
+    }
+
     // TODO: Rajouter test pour moins de 10 tours
 }

@@ -48,20 +48,12 @@ class Player
      **/
     public function save_throw_value(int $value, int $round_number, int $throw_number): void
     {
-        // Vérification que le numéro du tour soit cohérent
-        if ($round_number <= 0 || $round_number > GAME::MAX_ROUNDS)
+        if ($round_number < 1)
         {
-            throw new OutOfBoundsException(
-                "Le numéro du tour doit être compris entre 1 et " . GAME::MAX_ROUNDS . "(inclus)"
-            );
-        }
-
-        // Vérification que le numéro du lancer soit cohérent
-        if ($throw_number <= 0 || $throw_number > 3)
+            throw new OutOfBoundsException("Le numéro du round doit être supérieur ou égal à 1");
+        } else if ($throw_number < 1)
         {
-            throw new OutOfBoundsException(
-                "Le numéro du lancer doit être compris entre 1 et 3 (inclus)"
-            );
+            throw new OutOfBoundsException("Le numéro du lancer doit être supérieur ou égal à 1");
         }
 
         // Récupération de l'objet Round à l'emplacement désiré
@@ -81,31 +73,6 @@ class Player
     }
 
     /**
-     * Fonction permettant de savoir si le joueur a fait un spare dans n'importe quel round
-     * @param int $round Numéro du round dans lequel on veut savoir si le joueur a fait un spare (valeur entre 1 et 10)
-     * @return bool Vrai si le joueur a fait un spare, faux sinon
-     */
-    public function did_spare_in_round(int $round): bool
-    {
-        if ($round < 1 || $round > 10)
-        {
-            throw new OutOfBoundsException("Le numéro du tour doit être compris entre 1 et " . GAME::MAX_ROUNDS . ".");
-        }
-
-        return $this->scoreboard[$round]->get_first_throw() + $this->scoreboard[$round]->get_second_throw() === Game::MAX_PIN;
-    }
-
-    public function did_strike_in_round(int $round): bool
-    {
-        if ($round < 1 || $round > 10)
-        {
-            throw new OutOfBoundsException("Le numéro du tour doit être compris entre 1 et " . GAME::MAX_ROUNDS . ".");
-        }
-
-        return $this->scoreboard[$round]->get_first_throw() == Game::MAX_PIN;
-    }
-
-    /**
      * Fonction permettant d'ajouter un nouveau round au tableau des scores
      * @return void
      **/
@@ -114,46 +81,18 @@ class Player
         $this->scoreboard[] = new Round();
     }
 
-    /**
-     * Fonction permettant de calculer le score final du joueur
-     * @return int Nombre de points marqués par le joueur
-     **/
-    public function point_calculation(): int
+    public function get_first_throw_score(int $r): int
     {
-        $total = 0;
+        return $this->scoreboard[$r]->get_first_throw();
+    }
 
-        for ($i = 1 ; $i <= sizeof($this->scoreboard) ; $i++)
-        {
-            if ($this->did_spare_in_round($i))
-            {
-                $total += Game::MAX_PIN;
+    public function get_second_throw_score(int $r): int
+    {
+        return $this->scoreboard[$r]->get_second_throw();
+    }
 
-                // Si ce n'est pas le dernier round, on va regarder le premier lancer du round suivant
-                if ($i < GAME::MAX_ROUNDS)
-                {
-                    $total += $this->scoreboard[$i + 1]->get_first_throw();
-                } else // Sinon, on regarde dans le troisième lancer
-                {
-                    $total += $this->scoreboard[$i]->get_third_throw();
-                }
-            } elseif ($this->did_strike_in_round($i))
-            {
-                $total += Game::MAX_PIN;
-
-                if ($i < 10) {
-                    $total += $this->scoreboard[$i + 1]->get_first_throw();
-                    $total += $this->scoreboard[$i + 1]->get_second_throw();
-                } else {
-                    $total += $this->scoreboard[$i]->get_second_throw();
-                    $total += $this->scoreboard[$i]->get_third_throw();
-                }
-            } else // Si le joueur n'a pas fait de spare, alors on ne fait qu'additionner les points
-            {
-                $total += $this->scoreboard[$i]->get_first_throw();
-                $total += $this->scoreboard[$i]->get_second_throw();
-            }
-        }
-
-        return $total;
+    public function get_third_throw_score(int $r): int
+    {
+        return $this->scoreboard[$r]->get_third_throw();
     }
 }
