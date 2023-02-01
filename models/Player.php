@@ -38,6 +38,21 @@ class Player
         return $this->scoreboard;
     }
 
+    public function get_first_throw_score(int $r): ?int
+    {
+        return $this->scoreboard[$r]->get_first_throw();
+    }
+
+    public function get_second_throw_score(int $r): ?int
+    {
+        return $this->scoreboard[$r]->get_second_throw();
+    }
+
+    public function get_third_throw_score(int $r): ?int
+    {
+        return $this->scoreboard[$r]->get_third_throw();
+    }
+
     /**
      * Fonction permettant d'inscrire la valeur d'un lancer pour la mettre dans le numéro et le tour appropriés
      * @param int $value        Valeur du lancer à sauvegarder
@@ -79,20 +94,5 @@ class Player
     public function new_round(): void
     {
         $this->scoreboard[] = new Round();
-    }
-
-    public function get_first_throw_score(int $r): ?int
-    {
-        return $this->scoreboard[$r]->get_first_throw();
-    }
-
-    public function get_second_throw_score(int $r): ?int
-    {
-        return $this->scoreboard[$r]->get_second_throw();
-    }
-
-    public function get_third_throw_score(int $r): ?int
-    {
-        return $this->scoreboard[$r]->get_third_throw();
     }
 }

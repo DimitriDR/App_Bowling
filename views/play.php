@@ -38,46 +38,34 @@ if ($game->get_current_round() > $game->get_rounds())
             Valider
         </button>
     </form>
-    <?php
-    foreach($game->get_players() as $player)
-    {
-        echo "<h3 class=\"text-2xl text-center font-semibold\">" . htmlspecialchars($player->name) . "</h3>";
-        echo "<table class=\"table-auto w-full\">";
-        echo "<thead>";
-        echo "<tr>";
-        for($i = 1; $i <= $game->get_rounds(); $i++)
-        {
-            if($i == $game->get_rounds()){
-                echo "<th colspan=\"3\" class=\"border px-4 py-2\"> Tour " . $i . "</th>";
-            }
-            else{
-                echo "<th colspan=\"2\" class=\"border px-4 py-2\"> Tour " . $i . "</th>";
-            }
-        }
-        if ($game->point_calculation($player)>=0){
-            echo "<th class=\"border px-4 py-2\"> Score Total <br>" . $game->point_calculation($player) . "</th>";
-        }else{
-            echo "<th class=\"border px-4 py-2\"> Score Total <br>0</th>";
-        }
-        echo "</tr>";
-        echo "<tr>";
-        if($current_round == $game->get_rounds()){
-            foreach($player->get_scoreboard() as $round_number => $round_object){
-                if ($round_object->get_first_throw() !== -1): echo "<td class=\"border px-4 py-2 text-center\">" . $round_object->get_first_throw() . "</td>"; else: echo "<td class=\"border px-4 py-2 text-center\">-</td>"; endif;
-                if ($round_object->get_second_throw() !== -1): echo "<td class=\"border px-4 py-2 text-center\">" . $round_object->get_second_throw() . "</td>"; else: echo "<td class=\"border px-4 py-2 text-center\">-</td>"; endif;
-                if ($round_object->get_third_throw() !== -1): echo "<td class=\"border px-4 py-2 text-center\">" . $round_object->get_third_throw() . "</td>";endif;
-            }
-        }else{
-            foreach($player->get_scoreboard() as $round_number => $round_object){
-                if ($round_object->get_first_throw() !== -1): echo "<td class=\"border px-4 py-2 text-center\">" . $round_object->get_first_throw() . "</td>"; else: echo "<td class=\"border px-4 py-2 text-center\">-</td>"; endif;
-                if ($round_object->get_second_throw() !== -1): echo "<td class=\"border px-4 py-2 text-center\">" . $round_object->get_second_throw() . "</td>"; else: echo "<td class=\"border px-4 py-2 text-center\">-</td>"; endif;
-            }
-        }
-        echo "</tr>";
-        echo "</thead>";
-        echo "</table>";
-    }
-    ?>
+    <?php foreach($game->get_players() as $player): ?>
+    <h3 class="text-2xl text-center font-semibold"><?= htmlspecialchars($player->name) ?></h3>
+    <table class="table-auto w-full">
+    <thead>
+        <tr>
+            <?php for ($i = 1 ; $i <= sizeof($player->get_scoreboard()); $i++): ?>
+            <th scope="col" colspan="2" class="border px-4 py-1">Tour <?= $i ?></th>
+            <?php endfor; ?>
+            <th scope="col" class="border px-4 py-1">Score total</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+        <?php for ($i = 1 ; $i <= $game->get_current_round() ; $i++): ?>
+            <td class="text-center border px-4 py-1"><?= ($first = $player->get_first_throw_score($i)) === null ? "-" : $first ?></td>
+            <td class="text-center border px-4 py-1"><?= ($second = $player->get_second_throw_score($i)) === null ? "/" : $second ?></td>
+        <?php endfor; ?>
+            <td rowspan="2" colspan="2" class="text-center text-xl border px-4 py-1"><?= $game->total_score_for_player($player); ?></td>
+        </tr>
+        <tr>
+            <?php for ($i = 1 ; $i <= $game->get_current_round() ; $i++): ?>
+            <!-- Affichage du score du round -->
+            <td colspan="2" class="text-center border px-4 py-1"><?= ($v = $game->calculate_score_in_round_for_player($player, $i)) === null ? "-" : $v; ?></td>
+            <?php endfor; ?>
+        </tr>
+        </tbody>
+        </table>
+    <?php endforeach; ?>
 </main>
 </body>
 </html>

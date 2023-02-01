@@ -581,4 +581,21 @@ class GameTest extends TestCase
 
         $this->assertEquals(42, $g->total_score_for_player($p));
     }
+
+    public function test__calculate_total_strike()
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            1,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $g->save_throw(10);
+        $g->save_throw(5);
+        $g->save_throw(2);
+
+        $this->assertEquals(17, $g->total_score_for_player($p));
+    }
 }

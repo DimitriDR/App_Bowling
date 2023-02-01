@@ -308,10 +308,11 @@ class Game
                 if ($round === $this->rounds)
                 {
                     // Si l'on n'a pas les autres lancers de celui-ci, on ne peut rien faire
-                    if ($p->get_second_throw_score($round + 1 ) === null && $p->get_third_throw_score($round + 1) === null)
+                    if ($p->get_second_throw_score($round + 1) === null && $p->get_third_throw_score($round + 1) === null)
                     {
                         return null;
-                    } else {
+                    } else
+                    {
                         return $this->pins + $p->get_second_throw_score($round) + $p->get_third_throw_score($round);
                     }
                 } else
@@ -339,7 +340,8 @@ class Game
                     if ($p->get_second_throw_score($round) === null && $p->get_third_throw_score($round) === null)
                     {
                         return null;
-                    } else {
+                    } else
+                    {
                         return $this->pins + $p->get_second_throw_score($round) + $p->get_third_throw_score($round);
                     }
                 } else
@@ -352,7 +354,8 @@ class Game
                         return $p->get_first_throw_score($round) + $p->get_second_throw_score($round);
                     }
                 }
-            }else {
+            } else
+            {
                 // Si le joueur a fait un spare
                 if ($this->player_did_spare_in_round($p, $round))
                 {
@@ -440,7 +443,7 @@ class Game
 
             if ($round_score === null)
             {
-                return null;
+                break;
             }
 
             $total += $round_score;
