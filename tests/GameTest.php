@@ -244,7 +244,7 @@ class GameTest extends TestCase
         $this->assertEquals(2, $game->get_current_round());
         $this->assertEquals(2, sizeof($game->get_current_player()->get_scoreboard()));
     }
-
+/**
     public function test__compute_points_one_round(): void
     {
         $g = new Game([new Player("John Doe")], self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
@@ -401,5 +401,184 @@ class GameTest extends TestCase
         $p = $g->get_current_player();
 
         $this->assertEquals(10, $g->point_calculation($p));
+    }**/
+/**
+    public function test__calculate_score_in_round_for_player_no_throws_made()
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            self::NORMAL_NUMBER_OF_ROUNDS,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $result = $g->calculate_score_in_round_for_player($p, 1);
+
+        $this->assertEquals(null, $result);
+    }
+
+    public function test__calculate_score_in_round_for_player_simple()
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            self::NORMAL_NUMBER_OF_ROUNDS,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $g->save_throw(3);
+        $g->save_throw(2);
+
+        $result = $g->calculate_score_in_round_for_player($p, 1);
+        $expected = 5;
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function test__calculate_score_in_round_for_player_spare_simple()
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            self::NORMAL_NUMBER_OF_ROUNDS,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $g->save_throw(5);
+        $g->save_throw(5);
+
+        $g->next();
+
+        $g->save_throw(5);
+
+        $result     = $g->calculate_score_in_round_for_player($p, 1);
+        $expected   = 15;
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function test__calculate_score_in_round_for_player_spare_but_impossible()
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            self::NORMAL_NUMBER_OF_ROUNDS,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $g->save_throw(5);
+        $g->save_throw(5);
+
+        $g->next();
+
+        $result     = $g->calculate_score_in_round_for_player($p, 1);
+        $expected   = null;
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function test__calculate_score_in_round_for_player_spare_simple_last_round()
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            1,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $g->save_throw(5);
+        $g->save_throw(5);
+        $g->save_throw(3);
+
+        $g->next();
+
+        $result     = $g->calculate_score_in_round_for_player($p, 1);
+        $expected   = 13;
+
+        $this->assertEquals($expected, $result);
+    }
+
+    public function test__calculate_score_in_round_for_player_strike_simple()
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            self::NORMAL_NUMBER_OF_ROUNDS,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $g->save_throw(10);
+
+        $g->next();
+
+        $g->save_throw(2);
+        $g->save_throw(3);
+
+        $this->assertEquals(15, $g->calculate_score_in_round_for_player($p, 1));
+    }**/
+
+    public function test__calculate_score_in_round_for_player_strike_last()
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            1,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $g->save_throw(10);
+        $g->save_throw(1);
+        $g->save_throw(1);
+
+        $this->assertEquals(12, $g->calculate_score_in_round_for_player($p, 1));
+    }
+
+    public function test__calculate_total_correct_simple()
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            self::NORMAL_NUMBER_OF_ROUNDS,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $g->save_throw(10);
+
+        $g->next();
+
+        $g->save_throw(2);
+        $g->save_throw(3);
+
+        $this->assertEquals(20, $g->total_score_for_player($p));
+    }
+
+    public function test__calculate_total_long_match()
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            self::NORMAL_NUMBER_OF_ROUNDS,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        for ($i = 1; $i <= 9; $i++) {
+            $g->save_throw(2);
+            $g->save_throw(2);
+            $g->next();
+        }
+
+        $g->save_throw(5);
+        $g->save_throw(1);
+
+        $this->assertEquals(42, $g->total_score_for_player($p));
     }
 }

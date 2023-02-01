@@ -77,6 +77,15 @@ class Game
     }
 
     /**
+     * Accesseur tableau des joueurs
+     * @return array Tableau des joueurs
+     **/
+    public function get_players(): array
+    {
+        return $this->players;
+    }
+
+    /**
      * Accesseur pour récupérer le lancer sur lequel on est
      * @return int Numéro du lancer
      **/
@@ -135,10 +144,14 @@ class Game
         {
             if ($this->current_round != $this->rounds)
             {
-                if ($value_to_save > $this->pins - $player->get_first_throw_score($this->get_current_round()))
+                if ($player->get_first_throw_score($this->get_current_round()) != $this->pins)
                 {
-                    throw new LogicException("La valeur du lancer doit être inférieure ou égale à " . ($this->pins - $player->get_first_throw_score($this->get_current_round())));
+                    if (($value_to_save > $this->pins - $player->get_first_throw_score($this->get_current_round())))
+                    {
+                        throw new LogicException("La valeur du lancer doit être inférieure ou égale à " . ($this->pins - $player->get_first_throw_score($this->get_current_round())));
+                    }
                 }
+
             } else
             {
                 if (!($this->player_did_strike_in_round($player, $this->get_current_round())))
@@ -214,7 +227,10 @@ class Game
             throw new OutOfBoundsException("Le numéro du tour doit être compris entre 1 et " . $this->rounds . ".");
         }
 
-        return $p->get_scoreboard()[$round_number]->get_first_throw() + $p->get_scoreboard()[$round_number]->get_second_throw() === $this->pins;
+        $first_throw = $p->get_scoreboard()[$round_number]->get_first_throw();
+        $second_throw = $p->get_scoreboard()[$round_number]->get_second_throw();
+
+        return $first_throw + $second_throw === $this->pins;
     }
 
     /**
@@ -262,6 +278,175 @@ class Game
                 $this->get_current_player()->new_round();
             }
         }
+    }
+
+    /**
+     * Fonction pour calculer le score d'un joueur dans un round donné.
+     *
+     * @param Player $p  Joueur dont on veut calculer le score
+     * @param int $round Round dans lequel on veut calculer le score
+     * @return int|null     Score du joueur dans le round donné, ou null si le joueur n'a pas encore joué ce round
+     **/
+    public function calculate_score_in_round_for_player(Player $p, int $round): ?int
+    {
+        $first_throw = $p->get_first_throw_score($round);
+        $second_throw = $p->get_second_throw_score($round);
+
+        // Si le premier lancer est nul, on ne peut rien faire
+        if ($first_throw === null)
+        {
+            return null;
+        } elseif ($second_throw === null)
+        {
+            // Si le joueur n'a pas fait de strike, on retourne simplement la valeur du lancer
+            if (!$this->player_did_strike_in_round($p, $round))
+            {
+                return null;
+            } else
+            {
+                // Si on est au dernier round
+                if ($round === $this->rounds)
+                {
+                    // Si l'on n'a pas les autres lancers de celui-ci, on ne peut rien faire
+                    if ($p->get_second_throw_score($round + 1 ) === null && $p->get_third_throw_score($round + 1) === null)
+                    {
+                        return null;
+                    } else {
+                        return $this->pins + $p->get_second_throw_score($round) + $p->get_third_throw_score($round);
+                    }
+                } else
+                {
+
+                    // Si le joueur a fait un strike, on regarde si le premier et deuxième lancer suivant sont disponibles
+                    // Si ce n'est pas le cas, on retourne null
+                    if ($p->get_first_throw_score($round + 1) === null || $p->get_second_throw_score($round + 1) === null)
+                    {
+                        return null;
+                    } else // Sinon, on peut calculer le score
+                    {
+                        return $this->pins + $p->get_first_throw_score($round + 1) + $p->get_second_throw_score($round + 1);
+                    }
+                }
+            }
+        } else // En revanche, si le deuxième lancer non nul, on regarde si c'est un spare ou rien de spécial
+        {
+            if ($round == $this->rounds)
+            {
+                // Si on est au dernier round, on est peut-être dans le cas où on saisit pour le strike
+                if ($p->get_first_throw_score($round) === $this->pins)
+                {
+                    // Si l'on n'a pas les autres lancers de celui-ci, on ne peut rien faire
+                    if ($p->get_second_throw_score($round) === null && $p->get_third_throw_score($round) === null)
+                    {
+                        return null;
+                    } else {
+                        return $this->pins + $p->get_second_throw_score($round) + $p->get_third_throw_score($round);
+                    }
+                } else
+                {
+                    if ($p->get_second_throw_score($round) === null)
+                    {
+                        return null;
+                    } else
+                    {
+                        return $p->get_first_throw_score($round) + $p->get_second_throw_score($round);
+                    }
+                }
+            }else {
+                // Si le joueur a fait un spare
+                if ($this->player_did_spare_in_round($p, $round))
+                {
+                    // Si on est au dernier round, alors, on prend le troisième lancer
+                    if ($round === $this->rounds)
+                    {
+                        if ($p->get_third_throw_score($round) === null)
+                        {
+                            return null;
+                        } else
+                        {
+                            return $this->pins + $p->get_third_throw_score($round);
+                        }
+                    } else
+                    {
+                        // Si le round suivant n'a pas été joué, on ne peut pas (encore) calculer le score
+                        if ($p->get_first_throw_score($round + 1) === null)
+                        {
+                            return null;
+                        } else // Sinon, on ajoute le score du premier lancer du round suivant
+                        {
+                            return $this->pins + $p->get_first_throw_score($round + 1);
+                        }
+                    }
+                } else
+                {
+                    return $first_throw + $second_throw;
+                }
+                return $round_score;
+            }
+        }
+        /**
+         *
+         * // Si le joueur a fait un spare
+         * if ($this->player_did_spare_in_round($p, $round))
+         * {
+         * // Si on est au dernier round, alors, on prend le troisième lancer
+         * if ($round === $this->rounds)
+         * {
+         * $round_score += $this->pins + $p->get_third_throw_score($round);
+         * } else
+         * {
+         * // Si le round suivant n'a pas été joué, on ne peut pas (encore) calculer le score
+         * if ($p->get_first_throw_score($round + 1) === null)
+         * {
+         * return null;
+         * } else // Sinon, on ajoute le score du premier lancer du round suivant
+         * {
+         * $round_score += $this->pins + $p->get_first_throw_score($round + 1);
+         * }
+         * }
+         * } elseif ($this->player_did_strike_in_round($p, $round))
+         * {
+         * // Si on est au dernier round, alors on prend les deux derniers lancers
+         * if ($round === $this->rounds)
+         * {
+         * $round_score += $this->pins + $p->get_second_throw_score($round) + $p->get_third_throw_score($round);
+         * } else
+         * {
+         * // Si le round suivant n'a pas été joué, on ne peut pas (encore) calculer le score
+         * if ($p->get_first_throw_score($round + 1) === null || $p->get_second_throw_score($round + 1) === null)
+         * {
+         * return -10;
+         * } else
+         * {
+         * $round_score += $this->pins + $p->get_first_throw_score($round + 1) + $p->get_second_throw_score($round + 1);
+         * }
+         * }
+         * } else
+         * {
+         * $round_score += $first_throw + $second_throw;
+         * }
+         *
+         * return $round_score;*/
+    }
+
+
+    public function total_score_for_player(Player $p): ?int
+    {
+        $total = 0;
+
+        for ($i = 1 ; $i <= sizeof($p->get_scoreboard()) ; $i++)
+        {
+            $round_score = $this->calculate_score_in_round_for_player($p, $i);
+
+            if ($round_score === null)
+            {
+                return null;
+            }
+
+            $total += $round_score;
+        }
+
+        return $total;
     }
 
     /**

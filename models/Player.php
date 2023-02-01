@@ -81,17 +81,17 @@ class Player
         $this->scoreboard[] = new Round();
     }
 
-    public function get_first_throw_score(int $r): int
+    public function get_first_throw_score(int $r): ?int
     {
         return $this->scoreboard[$r]->get_first_throw();
     }
 
-    public function get_second_throw_score(int $r): int
+    public function get_second_throw_score(int $r): ?int
     {
         return $this->scoreboard[$r]->get_second_throw();
     }
 
-    public function get_third_throw_score(int $r): int
+    public function get_third_throw_score(int $r): ?int
     {
         return $this->scoreboard[$r]->get_third_throw();
     }

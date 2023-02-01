@@ -4,47 +4,47 @@ require_once "Game.php";
 class Round
 {
     /**
-     * @var int Valeur du premier lancer
+     * @var ?int Valeur du premier lancer
      **/
-    private int $first_throw = -1;
+    private ?int $first_throw = null;
 
     /**
-     * @var int Valeur du second lancer
+     * @var ?int Valeur du second lancer
      *
      * Si le joueur fait un strike, il n'a pas le droit au second lancer
      **/
-    private int $second_throw = -1;
+    private ?int $second_throw = null;
 
     /**
-     * @var int Valeur du troisième lancer
+     * @var ?int Valeur du troisième lancer
      *
      * Cette variable a une valeur quand le joueur fait un strike ou un spare au dernier tour
      **/
-    private int $third_throw = -1;
+    private ?int $third_throw = null;
 
     /**
      * Assesseur pour la valeur du premier lancer
-     * @return int Valeur du premier lancer
+     * @return ?int Valeur du premier lancer
      **/
-    public function get_first_throw(): int
+    public function get_first_throw(): ?int
     {
         return $this->first_throw;
     }
 
     /**
      * Assesseur pour la valeur du deuxième lancer
-     * @return int Valeur du deuxième lancer
+     * @return ?int Valeur du deuxième lancer
      **/
-    public function get_second_throw(): int
+    public function get_second_throw(): ?int
     {
         return $this->second_throw;
     }
 
     /**
      * Assesseur pour la valeur du troisième lancer
-     * @return int Valeur du troisième lancer
+     * @return ?int Valeur du troisième lancer
      **/
-    public function get_third_throw(): int
+    public function get_third_throw(): ?int
     {
         return $this->third_throw;
     }
