@@ -38,28 +38,6 @@ if ($game->get_current_round() > $game->get_rounds())
             Valider
         </button>
     </form>
-    <table class="table-auto w-full">
-        <thead>
-        <tr>
-            <th class="border px-4 py-2">Tour</th>
-            <th class="border px-4 py-2">Lancer 1</th>
-            <th class="border px-4 py-2">Lancer 2</th>
-            <th class="border px-4 py-2">Lancer 3</th>
-            <th class="border px-4 py-2">Score</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
-        foreach ($current_player->get_scoreboard() as $round_number => $round_object)
-        {
-            echo "<tr>";
-            echo "<td class=\"border px-4 py-2 text-center\">" . $round_number . "</td>";
-            if ($round_object->get_first_throw() !== -1):   echo "<td class=\"border px-4 py-2 text-center\">" . $round_object->get_first_throw() . "</td>"; else: echo "<td class=\"border px-4 py-2 text-center\">-</td>"; endif;
-            if ($round_object->get_second_throw() !== -1):  echo "<td class=\"border px-4 py-2 text-center\">" . $round_object->get_scond_throw() . "</td>"; else: echo "<td class=\"border px-4 py-2 text-center\">-</td>"; endif;
-            echo "</tr>";
-        }
-        ?>
-        </tbody>
 </main>
 </body>
 </html>

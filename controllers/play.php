@@ -38,7 +38,7 @@ $next_current_throw = $game->get_current_throw();
 // Avant le dernier round, toujours le même schéma
 if ($game->get_current_round() < $game->get_rounds())
 {
-    if ($next_current_throw >= 3 || $throw_value == 10) // TODO: changer 10 par le nombre de rounds
+    if ($next_current_throw >= 3 || $throw_value == $game->get_pins())
     {
         $game->next();
     }

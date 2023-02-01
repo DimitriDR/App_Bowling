@@ -48,6 +48,7 @@ class Game
      *
      * @param array $players    Liste des joueurs présents dans la partie
      * @param int $rounds       Nombre de tours de la partie choisie par le joueur
+     * @param int $pin_number   Nombre de quilles dans le jeu
      * @throws InvalidArgumentException Si un des joueurs n'est pas une instance de la classe Player
      **/
     public function __construct(array $players, int $rounds, int $pin_number)
@@ -249,7 +250,7 @@ class Game
                 $total += $this->pins;
 
                 // Si ce n'est pas le dernier round, on va regarder le premier lancer du round suivant
-                if ($i < $this->rounds)
+                if ($i < sizeof($p->get_scoreboard()))
                 {
                     $total += $p->get_first_throw_score($i+1);
                 } else // Sinon, on regarde dans le troisième lancer
@@ -260,7 +261,7 @@ class Game
             {
                 $total += $this->pins;
 
-                if ($i < 10) {
+                if ($i < sizeof($p->get_scoreboard())) {
                     $total += $p->get_first_throw_score($i+1);
                     $total += $p->get_second_throw_score($i+1);
                 } else {
