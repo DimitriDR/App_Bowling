@@ -26,7 +26,7 @@ if (!is_numeric($throw_value))
 try
 {
     $game->save_throw($throw_value);
-} catch (InvalidArgumentException $e)
+} catch (InvalidArgumentException|LogicException $e)
 {
     $_SESSION["error_message"] = $e->getMessage();
     header("Location: /play.php");

@@ -10,6 +10,10 @@ $game = unserialize($_SESSION["game"]);
 $current_round = $game->get_current_round();
 $current_player = $game->get_current_player();
 
+echo "<pre>";
+print_r($game);
+echo "</pre>";
+
 if ($game->get_current_round() > $game->get_rounds())
 {
     header("Location: /end.php");

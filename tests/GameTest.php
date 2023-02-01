@@ -83,6 +83,61 @@ class GameTest extends TestCase
         $this->assertEquals(999, $game->get_current_player()->get_first_throw_score(1));
     }
 
+    public function test__save_throw_more_than_pins(): void
+    {
+        $game = new Game(
+            $this->short_valid_list_players,
+            self::NORMAL_NUMBER_OF_ROUNDS,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $game->save_throw(7); // On fait tomber 7 quilles, il en reste donc 3
+        $this->expectException(LogicException::class);
+        $game->save_throw(5); // On fait tomber 6 quilles [impossible]
+    }
+
+    public function test__save_throw_more_than_pins_2(): void
+    {
+        $game = new Game(
+            $this->short_valid_list_players,
+            1,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $game->save_throw(10);
+        $game->save_throw(7);
+        $game->save_throw(8);
+
+        $this->assertEquals(10, $game->get_current_player()->get_first_throw_score(1));
+        $this->assertEquals(7, $game->get_current_player()->get_second_throw_score(1));
+        $this->assertEquals(8, $game->get_current_player()->get_third_throw_score(1));
+    }
+
+    public function test__save_throw_more_than_pins_3(): void
+    {
+        $game = new Game(
+            [new Player("Player 1")],
+            1,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        // Pas de spare, ni de strike ici
+        $game->save_throw(4);
+        $game->save_throw(3);
+
+        $game->next();
+
+        $game->save_throw(8);
+
+        $this->assertEquals(4, $game->get_current_player()->get_first_throw_score(1));
+        $this->assertEquals(3, $game->get_current_player()->get_second_throw_score(1));
+        $this->assertEquals(8, $game->get_current_player()->get_first_throw_score(2));
+
+        $this->expectException(LogicException::class);
+        $game->save_throw(5);
+
+    }
+
     public function test__current_player_did_spare(): void
     {
         $game = new Game($this->short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
@@ -205,12 +260,15 @@ class GameTest extends TestCase
     {
         $g = new Game([new Player("John Doe")], self::NORMAL_NUMBER_OF_ROUNDS, 6);
         $g->save_throw(6); // Strike
+
+        $g->next();
+
         $g->save_throw(3);
-        $g->save_throw(4);
+        $g->save_throw(2);
 
         $p = $g->get_current_player();
 
-        $this->assertEquals(13, $g->point_calculation($p));
+        $this->assertEquals(16, $g->point_calculation($p));
     }
 
     public function test__compute_points_spare(): void
