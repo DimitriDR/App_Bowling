@@ -103,6 +103,15 @@ class Game
     }
 
     /**
+     * Accesseur tableau des joueurs
+     * @return array Tableau des joueurs
+     */
+    public function get_players(): array
+    {
+        return $this->players;
+    }
+
+    /**
      * Accesseur pour récupérer le nombre de quilles
      * @return int Nombre de quilles
      */
@@ -249,7 +258,7 @@ class Game
                 $total += $this->pins;
 
                 // Si ce n'est pas le dernier round, on va regarder le premier lancer du round suivant
-                if ($i < $this->rounds)
+                if ($i < sizeof($p->get_scoreboard()))
                 {
                     $total += $p->get_first_throw_score($i+1);
                 } else // Sinon, on regarde dans le troisième lancer
@@ -260,7 +269,7 @@ class Game
             {
                 $total += $this->pins;
 
-                if ($i < 10) {
+                if ($i < sizeof($p->get_scoreboard())) {
                     $total += $p->get_first_throw_score($i+1);
                     $total += $p->get_second_throw_score($i+1);
                 } else {
