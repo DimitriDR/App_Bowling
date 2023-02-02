@@ -75,7 +75,6 @@ if ($game->get_current_round() > $game->get_rounds())
             <?php endfor; ?>
         </tr>
         </tbody>
-        <caption></caption>
         </table>
     <?php endforeach; ?>
 </main>

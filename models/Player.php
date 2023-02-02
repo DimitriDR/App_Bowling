@@ -40,16 +40,31 @@ class Player
 
     public function get_first_throw_score(int $r): ?int
     {
+        if (!array_key_exists($r, $this->scoreboard))
+        {
+            return null;
+        }
+
         return $this->scoreboard[$r]->get_first_throw();
     }
 
     public function get_second_throw_score(int $r): ?int
     {
+        if (!array_key_exists($r, $this->scoreboard))
+        {
+            return null;
+        }
+
         return $this->scoreboard[$r]->get_second_throw();
     }
 
     public function get_third_throw_score(int $r): ?int
     {
+        if (!array_key_exists($r, $this->scoreboard))
+        {
+            return null;
+        }
+
         return $this->scoreboard[$r]->get_third_throw();
     }
 
@@ -63,10 +78,11 @@ class Player
      **/
     public function save_throw_value(int $value, int $round_number, int $throw_number): void
     {
+        // Vérification que les paramètres soient cohérents
         if ($round_number < 1)
         {
             throw new OutOfBoundsException("Le numéro du round doit être supérieur ou égal à 1");
-        } else if ($throw_number < 1)
+        } elseif ($throw_number < 1)
         {
             throw new OutOfBoundsException("Le numéro du lancer doit être supérieur ou égal à 1");
         }
@@ -75,16 +91,9 @@ class Player
         /** @var Round $working_round */
         $working_round = $this->scoreboard[$round_number];
 
-        if ($throw_number === 1)
-        {
-            $working_round->set_first_throw($value);
-        } elseif ($throw_number === 2)
-        {
-            $working_round->set_second_throw($value);
-        } elseif ($throw_number === 3)
-        {
-            $working_round->set_third_throw($value);
-        }
+        if ($throw_number === 1)     { $working_round->set_first_throw($value);  }
+        elseif ($throw_number === 2) { $working_round->set_second_throw($value); }
+        elseif ($throw_number === 3) { $working_round->set_third_throw($value);  }
     }
 
     /**
