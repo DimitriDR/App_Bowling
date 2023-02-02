@@ -402,8 +402,12 @@ class GameTest extends TestCase
 
         $this->assertEquals(10, $g->point_calculation($p));
     }**/
-/**
-    public function test__calculate_score_in_round_for_player_no_throws_made()
+
+    /**
+     * Fonction dans le cas où aucun lancer n'a encore été fait
+     * @return void
+    **/
+    public function test__calculate_score_in_round_for_player_no_throws_made(): void
     {
         $p = new Player("John Doe");
 
@@ -418,7 +422,11 @@ class GameTest extends TestCase
         $this->assertEquals(null, $result);
     }
 
-    public function test__calculate_score_in_round_for_player_simple()
+    /**
+     * Cas hors exception, des valeurs qui ne feront ni spare, ni strike
+     * @return void
+    **/
+    public function test__calculate_score_in_round_for_player_simple(): void
     {
         $p = new Player("John Doe");
 
@@ -437,7 +445,11 @@ class GameTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function test__calculate_score_in_round_for_player_spare_simple()
+    /**
+     * Cas avec un spare très basique qui n'est pas au dernier round
+     * @return void
+    **/
+    public function test__calculate_score_in_round_for_player_spare_simple(): void
     {
         $p = new Player("John Doe");
 
@@ -460,7 +472,12 @@ class GameTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function test__calculate_score_in_round_for_player_spare_but_impossible()
+    /**
+     * Cas avec un spare qui n'est pas au dernier round, mais dont
+     * la première valeur du round suivant n'est pas encore connue.
+     * @return void
+    **/
+    public function test__calculate_score_in_round_for_player_spare_but_impossible(): void
     {
         $p = new Player("John Doe");
 
@@ -481,7 +498,11 @@ class GameTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function test__calculate_score_in_round_for_player_spare_simple_last_round()
+    /**
+     * Cas d'un spare mais au dernier round
+     * @return void
+     */
+    public function test__calculate_score_in_round_for_player_spare_simple_last_round(): void
     {
         $p = new Player("John Doe");
 
@@ -503,7 +524,36 @@ class GameTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public function test__calculate_score_in_round_for_player_strike_simple()
+    /**
+     * Cas d'un spare au dernier round impossible à calculer, car pas de troisième lancer
+     * @return void
+     */
+    public function test__calculate_score_in_round_for_player_spare_simple_last_round_but_impossible(): void
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            1,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $g->save_throw(5);
+        $g->save_throw(5);
+
+        $g->next();
+
+        $result     = $g->calculate_score_in_round_for_player($p, 1);
+        $expected   = null;
+
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Cas d'un strike au premier round
+     * @return void
+    **/
+    public function test__calculate_score_in_round_for_player_strike_simple(): void
     {
         $p = new Player("John Doe");
 
@@ -520,10 +570,17 @@ class GameTest extends TestCase
         $g->save_throw(2);
         $g->save_throw(3);
 
-        $this->assertEquals(15, $g->calculate_score_in_round_for_player($p, 1));
-    }**/
+        $result     = $g->calculate_score_in_round_for_player($p, 1);
+        $expected   = 15;
 
-    public function test__calculate_score_in_round_for_player_strike_last()
+        $this->assertEquals($expected, $result);
+    }
+
+    /**
+     * Cas d'un strike en dernier round
+     * @return void
+     */
+    public function test__calculate_score_in_round_for_player_strike_last(): void
     {
         $p = new Player("John Doe");
 
@@ -540,7 +597,11 @@ class GameTest extends TestCase
         $this->assertEquals(12, $g->calculate_score_in_round_for_player($p, 1));
     }
 
-    public function test__calculate_total_correct_simple()
+    /**
+     * Cas d'un strike dans un round intermédiaire
+     * @return void
+     */
+    public function test__calculate_total_correct_simple(): void
     {
         $p = new Player("John Doe");
 

@@ -44,7 +44,11 @@ if ($game->get_current_round() > $game->get_rounds())
     <thead>
         <tr>
             <?php for ($i = 1 ; $i <= sizeof($player->get_scoreboard()); $i++): ?>
+            <?php if($i !== $game->get_rounds()): ?>
             <th scope="col" colspan="2" class="border px-4 py-1">Tour <?= $i ?></th>
+            <?php else: ?>
+            <th scope="col" colspan="3" class="border px-4 py-1">Tour <?= $i ?></th>
+            <?php endif; ?>
             <?php endfor; ?>
             <th scope="col" class="border px-4 py-1">Score total</th>
         </tr>
@@ -54,16 +58,24 @@ if ($game->get_current_round() > $game->get_rounds())
         <?php for ($i = 1 ; $i <= $game->get_current_round() ; $i++): ?>
             <td class="text-center border px-4 py-1"><?= ($first = $player->get_first_throw_score($i)) === null ? "-" : $first ?></td>
             <td class="text-center border px-4 py-1"><?= ($second = $player->get_second_throw_score($i)) === null ? "/" : $second ?></td>
+            <?php if($i === $game->get_rounds()): ?>
+            <td class="text-center border px-4 py-1"><?= ($third = $player->get_third_throw_score($i)) === null ? "-" : $third ?></td>
+            <?php endif; ?>
         <?php endfor; ?>
-            <td rowspan="2" colspan="2" class="text-center text-xl border px-4 py-1"><?= $game->total_score_for_player($player); ?></td>
+            <td rowspan="2" colspan="2" class="text-center text-xl border px-4 py-1"><?= ($total_score = $game->total_score_for_player($player)) === null ? "-" : $total_score; ?></td>
         </tr>
         <tr>
             <?php for ($i = 1 ; $i <= $game->get_current_round() ; $i++): ?>
             <!-- Affichage du score du round -->
+            <?php if($i !== $game->get_rounds()): ?>
             <td colspan="2" class="text-center border px-4 py-1"><?= ($v = $game->calculate_score_in_round_for_player($player, $i)) === null ? "-" : $v; ?></td>
+            <?php else: ?>
+            <td colspan="3" class="text-center border px-4 py-1"><?= ($v = $game->calculate_score_in_round_for_player($player, $i)) === null ? "-" : $v; ?></td>
+            <?php endif; ?>
             <?php endfor; ?>
         </tr>
         </tbody>
+        <caption></caption>
         </table>
     <?php endforeach; ?>
 </main>
