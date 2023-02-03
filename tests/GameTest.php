@@ -5,18 +5,8 @@ use PHPUnit\Framework\TestCase;
 
 class GameTest extends TestCase
 {
-    private array $short_valid_list_players;
     const NORMAL_NUMBER_OF_ROUNDS = 10;
     const NORMAL_NUMBER_OF_PINS = 10;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->short_valid_list_players = array(
-            new Player("Player 1"),
-            new Player("Player 2")
-        );
-    }
 
     public function test__game_init(): void
     {
@@ -39,7 +29,12 @@ class GameTest extends TestCase
 
     public function test__game_get_rounds(): void
     {
-        $game = new Game($this->short_valid_list_players,
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players,
             self::NORMAL_NUMBER_OF_ROUNDS,
             self::NORMAL_NUMBER_OF_PINS
         );
@@ -49,7 +44,12 @@ class GameTest extends TestCase
 
     public function test__game_get_pins(): void
     {
-        $game = new Game($this->short_valid_list_players,
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players,
             self::NORMAL_NUMBER_OF_ROUNDS,
             self::NORMAL_NUMBER_OF_PINS
         );
@@ -59,8 +59,13 @@ class GameTest extends TestCase
 
     public function test__save_throw_normal(): void
     {
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
         $game = new Game(
-            $this->short_valid_list_players,
+            $short_valid_list_players,
             self::NORMAL_NUMBER_OF_ROUNDS,
             self::NORMAL_NUMBER_OF_PINS
         );
@@ -71,22 +76,37 @@ class GameTest extends TestCase
 
     public function test__save_throw_out_of_range(): void
     {
-        $game = new Game($this->short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
         $this->expectException(InvalidArgumentException::class);
         $game->save_throw(999);
     }
 
     public function test__save_throw_huge(): void
     {
-        $game = new Game($this->short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, 1000);
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, 1000);
         $game->save_throw(999);
         $this->assertEquals(999, $game->get_current_player()->get_first_throw_score(1));
     }
 
     public function test__save_throw_more_than_pins(): void
     {
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
         $game = new Game(
-            $this->short_valid_list_players,
+            $short_valid_list_players,
             self::NORMAL_NUMBER_OF_ROUNDS,
             self::NORMAL_NUMBER_OF_PINS
         );
@@ -98,8 +118,13 @@ class GameTest extends TestCase
 
     public function test__save_throw_more_than_pins_2(): void
     {
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
         $game = new Game(
-            $this->short_valid_list_players,
+            $short_valid_list_players,
             1,
             self::NORMAL_NUMBER_OF_PINS
         );
@@ -140,7 +165,12 @@ class GameTest extends TestCase
 
     public function test__current_player_did_spare(): void
     {
-        $game = new Game($this->short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
         $game->save_throw(5);
         $game->save_throw(5);
         $this->assertTrue($game->current_player_did_spare());
@@ -148,7 +178,12 @@ class GameTest extends TestCase
 
     public function test__current_player_did_spare_even(): void
     {
-        $game = new Game($this->short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, 6);
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, 6);
         $game->save_throw(3);
         $game->save_throw(3);
         $this->assertTrue($game->current_player_did_spare());
@@ -156,7 +191,12 @@ class GameTest extends TestCase
 
     public function test__current_player_did_spare_odd(): void
     {
-        $game = new Game($this->short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, 3);
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, 3);
         $game->save_throw(3);
         $game->save_throw(0);
         $this->assertTrue($game->current_player_did_spare());
@@ -164,28 +204,48 @@ class GameTest extends TestCase
 
     public function test__current_player_did_strike(): void
     {
-        $game = new Game($this->short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
         $game->save_throw(10);
         $this->assertTrue($game->current_player_did_strike());
     }
 
     public function test__current_player_did_not_make_strike(): void
     {
-        $game = new Game($this->short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
         $game->save_throw(9);
         $this->assertFalse($game->current_player_did_strike());
     }
 
     public function test__current_player_did_strike_odd(): void
     {
-        $game = new Game($this->short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, 3);
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, 3);
         $game->save_throw(3);
         $this->assertTrue($game->current_player_did_strike());
     }
 
     public function test__current_player_did_strike_even(): void
     {
-        $game = new Game($this->short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, 6);
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, 6);
         $game->save_throw(6);
         $this->assertTrue($game->current_player_did_strike());
     }
@@ -204,33 +264,48 @@ class GameTest extends TestCase
 
     public function test__next__next_player(): void
     {
-        $game = new Game($this->short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
         $game->save_throw(1);
         $game->save_throw(1);
 
         $game->next();
 
         $this->assertEquals(1, $game->get_current_round());
-        $this->assertEquals($this->short_valid_list_players[1], $game->get_current_player());
+        $this->assertEquals($short_valid_list_players[1], $game->get_current_player());
 
     }
 
     public function test__next__next_player_0_score(): void
     {
-        $game = new Game($this->short_valid_list_players, 2, self::NORMAL_NUMBER_OF_PINS);
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players, 2, self::NORMAL_NUMBER_OF_PINS);
         $game->save_throw(0);
         $game->save_throw(0);
 
         $game->next();
 
         $this->assertEquals(1, $game->get_current_round());
-        $this->assertEquals($this->short_valid_list_players[1], $game->get_current_player());
+        $this->assertEquals($short_valid_list_players[1], $game->get_current_player());
 
     }
 
     public function test__next__next_player_above_2(): void
     {
-        $game = new Game($this->short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
+        $short_valid_list_players = array(
+            new Player("Player 1"),
+            new Player("Player 2")
+        );
+
+        $game = new Game($short_valid_list_players, self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
         $game->save_throw(1);
         $game->save_throw(1);
 
