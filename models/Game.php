@@ -34,21 +34,22 @@ class Game
     private int $current_throw = 1;
 
     /**
-     * @var int Nombre de tours de la partie choisie par le joueur
+     * @var int Nombre de tours de la partie choisi par le joueur
      */
     private int $rounds;
 
     /**
-     * @var int Nombre de quilles dans le jeu
+     * @var int Nombre de quilles dans le jeu choisi par le joueur
      **/
     private int $pins;
 
     /**
      * Constructeur permettant d'intégrer directement une liste de joueurs
+     * et de définir le nombre de tours et de quilles
      *
      * @param array $players  Liste des joueurs présents dans la partie
-     * @param int $rounds     Nombre de tours de la partie choisie par le joueur
-     * @param int $pin_number Nombre de quilles dans le jeu
+     * @param int $rounds     Nombre de tours de la partie choisi par le joueur
+     * @param int $pin_number Nombre de quilles dans le jeu choisi par le joueur
      * @throws InvalidArgumentException Si un des joueurs n'est pas une instance de la classe Player
      **/
     public function __construct(array $players, int $rounds, int $pin_number)
@@ -139,8 +140,10 @@ class Game
         // On récupère le joueur courant
         $player = $this->get_current_player();
 
-        // Au premier et deuxième lancer, on ne peut pas mettre un nombre de quilles tombées que ce qu'il reste
-        if ($this->current_throw < 3)
+        // Au premier lancer, on vérifie que la valeur du lancer soit inférieure ou égale au nombre de quilles
+        // Au deuxième lancer, on vérifie que la valeur du lancer soit inférieure ou égale au nombre de quilles moins la valeur du premier lancer
+        
+        if ($this->current_throw < 3) // Si on est au premier ou au deuxième lancer
         {
             if ($this->current_round != $this->rounds) // Si on n'est pas au dernier round
             {
@@ -162,15 +165,33 @@ class Game
                     }
                 }
             }
-        } else // Au dernier round, on ne peut pas mettre le nombre que l'on veut sauf si l'on a fait un spare ou un strike
+        } else // On est au troisième lancer
         {
-            if($this->current_throw == 3 && $value_to_save > $this->pins - $player->get_second_throw_score($this->get_current_round()))
+            //Si le joueur a fait deux strikes dans le round courant
+            if($this->player_did_strike_in_round($player, $this->get_current_round()) && $player->get_second_throw_score($this->get_current_round() == $this->pins))
             {
-                throw new LogicException("La valeur du lancer doit être inférieure ou égale à " . $this->pins - $player->get_second_throw_score($this->get_current_round()));
+                if($value_to_save > $this->pins)
+                {
+                    throw new LogicException("La valeur du lancer doit être inférieure ou égale à " . $this->pins);
+                }
             }
-            if (!($this->player_did_strike_in_round($player, $this->get_current_round())) && !($this->player_did_spare_in_round($player, $this->get_current_round())))
+
+            //Si le joueur a fait un strike dans le round courant
+            if($this->player_did_strike_in_round($player, $this->get_current_round()) && $player->get_second_throw_score($this->get_current_round() != $this->pins))
             {
-                throw new LogicException("La valeur du lancer doit être inférieure ou égale à " . ($this->pins - $player->get_first_throw_score($this->get_current_round())));
+                if($value_to_save > $this->pins - $player->get_second_throw_score($this->get_current_round()))
+                {
+                    throw new LogicException("La valeur du lancer doit être inférieure ou égale à " . ($this->pins - $player->get_second_throw_score($this->get_current_round())));
+                }
+            }
+
+            //Si le joueur a fait un spare dans le round courant
+            if($this->player_did_spare_in_round($player, $this->get_current_round()))
+            {
+                if($value_to_save > $this->pins)
+                {
+                    throw new LogicException("La valeur du lancer doit être inférieure ou égale à " . $this->pins);
+                }
             }
 
         }

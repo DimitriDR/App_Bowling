@@ -47,7 +47,6 @@ require_once dirname(__DIR__) . "/models/Game.php"; ?>
         </tr>
         <tr>
             <?php for ($i = 1 ; $i <= $game->get_current_round() ; $i++): ?>
-            <!-- Affichage du score du round -->
             <?php if($i !== $game->get_rounds()): ?>
             <td colspan="2" class="text-center border px-4 py-1"><?= ($v = $game->calculate_score_in_round_for_player($player, $i)) === null ? "-" : $v; ?></td>
             <?php else: ?>

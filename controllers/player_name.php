@@ -23,10 +23,9 @@ for ($i = 0 ; $i < $_SESSION["player_number"] ; $i++)
 
 $players = array();
 
-// Si tous les champs sont OK, on crée un objet pour chacun des joueurs renseignés
+// Si tous les champs sont OK, on crée un objet pour chacun des joueurs renseignés et un tableau contenant tous les joueurs
 for ($j = 0 ; $j < $_SESSION["player_number"] ; $j++)
 {
-    // Création du nouveau joueur que l'on va rajouter dans le tableau des joueurs
     $new_player = new Player($_POST["player_name_" . $j]);
     $players[] = $new_player;
 }
@@ -34,7 +33,7 @@ for ($j = 0 ; $j < $_SESSION["player_number"] ; $j++)
 // Création du jeu auquel on y ajoute directement les joueurs
 $game = new Game($players, $_SESSION["rounds"], $_SESSION["pin_number"]);
 
-// Suppression de la variable comportant le nombre de joueurs, ainsi que le nombre de rounds
+// Suppression de la variable comportant le nombre de joueurs, ainsi que le nombre de rounds et de quilles
 // dans la session maintenant que l'instance Game va prendre le relai
 unset($_SESSION["player_number"]);
 unset($_SESSION["rounds"]);
