@@ -333,6 +333,10 @@ class Game
             // Si le joueur a fait un spare, on attend le premier lancer du round suivant pour calculer le score
             if ($this->player_did_strike_in_round($p, $round))
             {
+                if ($this->player_did_strike_in_round($p, $round + 1) && $round + 1 !== $this->rounds)
+                {
+                    return $this->pins + $this->pins + $p->get_first_throw_score($round + 2);
+                }
                 // Si le joueur a fait un strike, on attend le premier et le deuxième lancer du round suivant pour calculer le score
                 if ($p->get_first_throw_score($round + 1) === null || $p->get_second_throw_score($round + 1) === null)
                 {
