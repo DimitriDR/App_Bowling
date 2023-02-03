@@ -34,4 +34,4 @@ jobs:
       - name: Exécution des tests PHPUnit
         run: |
           cd tests
-          phpunit --list-tests .
+          phpunit --textdox .
