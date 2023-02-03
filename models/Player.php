@@ -32,13 +32,13 @@ class Player
 
     /**
      * @return array Tableau contenant les points marqués par le joueur
-     */
+    **/
     public function get_scoreboard(): array
     {
         return $this->scoreboard;
     }
 
-w    /**
+    /**
      * Permet de récupérer la valeur du premier lancer d'un round au choix
      * @param int $r Numéro du round dont on veut le premier lancer
      * @return int|null Valeur du lancer, NULL sinon
