@@ -10,7 +10,6 @@ if (!isset($_POST["submit"]))
 }
 
 /** Pour forcer l'IDE à connaître le type de la variable **/
-/* @var Game $game */
 $game = unserialize($_SESSION["game"]);
 
 $throw_value = $_POST["throw_value"];
@@ -45,7 +44,7 @@ if ($game->get_current_round() < $game->get_rounds())
 } else
 {
     // Dans le dernier round
-    // On a un cas particulier si le joueur a fait un spare
+    // On a un cas particulier si le joueur a fait un spare ou un strike
     if ($next_current_throw === 3)
     { // Si le prochain lancer est le troisième, on le passe si le joueur n'a fait ni un spare ni un strike
         if (!($game->current_player_did_spare()) && !($game->current_player_did_strike()))
