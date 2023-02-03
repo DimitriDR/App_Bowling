@@ -1,7 +1,7 @@
 <?php
 require_once dirname(__DIR__) . "/controllers/header.start_session.php";
 
-if (isset($_SESSION["error_message"])):
+if(isset($_SESSION["error_message"])):
 ?>
 <div class="bg-red-100 mb-2 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
     <strong class="font-bold">Erreur.</strong>

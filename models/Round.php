@@ -4,19 +4,19 @@ require_once "Game.php";
 class Round
 {
     /**
-     * @var ?int Valeur du premier lancer
+     * @var ?int Valeur du premier lancer. Initialisée à NULL et devient un nombre si le round a fait un lancer
      **/
     private ?int $first_throw = null;
 
     /**
-     * @var ?int Valeur du second lancer
+     * @var ?int Valeur du second lancer. Initialisée à NULL et devient un nombre si le round a fait un lancer
      *
      * Si le joueur fait un strike, il n'a pas le droit au second lancer
      **/
     private ?int $second_throw = null;
 
     /**
-     * @var ?int Valeur du troisième lancer
+     * @var ?int Valeur du troisième lancer. Initialisée à NULL et devient un nombre si le round a fait un lancer
      *
      * Cette variable a une valeur quand le joueur fait un strike ou un spare au dernier tour
      **/
@@ -53,7 +53,6 @@ class Round
      * Mutateur pour le premier lancer
      *
      * @param int $throw_value Valeur du premier lancer comprises en 0 et Game::MAX_PIN
-     * @throws InvalidArgumentException Exception levée si la valeur du lancer n'est pas comprise dans l'intervalle [0, Game::MAX_PIN]
     **/
     public function set_first_throw(int $throw_value): void
     {
@@ -64,8 +63,6 @@ class Round
      * Mutateur pour le deuxième lancer
      *
      * @param int $throw_value Valeur du deuxième lancer comprises en 0 et Game::MAX_PIN
-     * @throws InvalidArgumentException Exception levée si la valeur du lancer n'est pas comprise dans l'intervalle [0, Game::MAX_PIN]
-     * @throws LogicException Exception levée si on veut définir une valeur alors que le joueur a fait un strike au premier lancer
      **/
     public function set_second_throw(int $throw_value): void
     {
@@ -76,7 +73,6 @@ class Round
      * Mutateur pour le troisième lancer
      *
      * @param int $throw_value Valeur du deuxième lancer comprises en 0 et Game::MAX_PIN
-     * @throws InvalidArgumentException Exception levée si la valeur du lancer n'est pas comprise dans l'intervalle [0,Game::MAX_PIN]
      **/
     public function set_third_throw(int $throw_value): void
     {
