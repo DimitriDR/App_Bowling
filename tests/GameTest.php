@@ -106,11 +106,11 @@ class GameTest extends TestCase
 
         $game->save_throw(10);
         $game->save_throw(7);
-        $game->save_throw(8);
+        $game->save_throw(2);
 
         $this->assertEquals(10, $game->get_current_player()->get_first_throw_score(1));
         $this->assertEquals(7, $game->get_current_player()->get_second_throw_score(1));
-        $this->assertEquals(8, $game->get_current_player()->get_third_throw_score(1));
+        $this->assertEquals(2, $game->get_current_player()->get_third_throw_score(1));
     }
 
     public function test__save_throw_more_than_pins_3(): void
@@ -244,164 +244,6 @@ class GameTest extends TestCase
         $this->assertEquals(2, $game->get_current_round());
         $this->assertEquals(2, sizeof($game->get_current_player()->get_scoreboard()));
     }
-/**
-    public function test__compute_points_one_round(): void
-    {
-        $g = new Game([new Player("John Doe")], self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
-        $g->save_throw(1);
-        $g->save_throw(6);
-
-        $p = $g->get_current_player();
-
-        $this->assertEquals(7, $g->point_calculation($p));
-    }
-
-    public function test__compute_points_one_round_6_pins(): void
-    {
-        $g = new Game([new Player("John Doe")], self::NORMAL_NUMBER_OF_ROUNDS, 6);
-        $g->save_throw(6); // Strike
-
-        $g->next();
-
-        $g->save_throw(3);
-        $g->save_throw(2);
-
-        $p = $g->get_current_player();
-
-        $this->assertEquals(16, $g->point_calculation($p));
-    }
-
-    public function test__compute_points_spare(): void
-    {
-        $g = new Game([new Player("John Doe")], self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
-        $g->save_throw(5);
-        $g->save_throw(5);
-
-        $g->next();
-
-        $g->save_throw(6);
-        $g->save_throw(2);
-
-        $p = $g->get_current_player();
-
-        $this->assertEquals(24, $g->point_calculation($p));
-    }
-
-    public function test__compute_points_spare_4_pins(): void
-    {
-        $g = new Game([new Player("John Doe")], self::NORMAL_NUMBER_OF_ROUNDS, 4);
-        $g->save_throw(2);
-        $g->save_throw(2);
-
-        $g->next();
-
-        $g->save_throw(2);
-        $g->save_throw(1);
-
-        $p = $g->get_current_player();
-
-        $this->assertEquals(9, $g->point_calculation($p));
-    }
-
-    public function test__compute_points_spare_2(): void
-    {
-        $g = new Game([new Player("John Doe")], self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
-        $g->save_throw(5);
-        $g->save_throw(5);
-
-        $g->next();
-
-        $g->save_throw(3);
-        $g->save_throw(2);
-
-        $p = $g->get_current_player();
-
-        $this->assertEquals(18, $g->point_calculation($p));
-    }
-
-    public function test__compute_points_strike(): void
-    {
-        $g = new Game([new Player("John Doe")], self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
-        $g->save_throw(10);
-
-        $g->next();
-
-        $g->save_throw(5);
-        $g->save_throw(4);
-
-        $p = $g->get_current_player();
-
-        $this->assertEquals(28, $g->point_calculation($p));
-    }
-
-    public function test__compute_points_strike_near_end(): void
-    {
-        $g = new Game([new Player("John Doe")], self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
-
-        // On triche un peu pour remplir uniquement le dernier round
-        for ($i = 0 ; $i < 9 ; $i++)
-        {
-            $g->save_throw(2);
-            $g->save_throw(2);
-            $g->next();
-        }
-
-        $g->save_throw(10);
-        $g->save_throw(5);
-        $g->save_throw(4);
-
-        $p = $g->get_current_player();
-
-        $this->assertEquals(55, $g->point_calculation($p));
-    }
-
-    public function test__compute_points_spare_near_end(): void
-    {
-        $g = new Game([new Player("John Doe")], self::NORMAL_NUMBER_OF_ROUNDS, self::NORMAL_NUMBER_OF_PINS);
-
-        // On triche un peu pour remplir uniquement le dernier round
-        for ($i = 0 ; $i < 9 ; $i++)
-        {
-            $g->save_throw(2);
-            $g->save_throw(2);
-            $g->next();
-        }
-
-        $g->save_throw(5);
-        $g->save_throw(5);
-        $g->save_throw(4);
-
-        $p = $g->get_current_player();
-
-        $this->assertEquals(50, $g->point_calculation($p));
-    }
-
-    public function test__compute_points_strike_6_pins(): void
-    {
-        $g = new Game([new Player("John Doe")], self::NORMAL_NUMBER_OF_ROUNDS, 6);
-        $g->save_throw(6);
-
-        $g->next();
-
-        $g->save_throw(1);
-        $g->save_throw(3);
-
-        $p = $g->get_current_player();
-
-        $this->assertEquals(14, $g->point_calculation($p));
-    }
-
-    public function test__compute_points_strike_6_pins_last_round(): void
-    {
-        $g = new Game([new Player("John Doe")], 1, 6);
-        $g->save_throw(6);
-        $g->save_throw(1);
-        $g->save_throw(3);
-
-        $p = $g->get_current_player();
-
-        $this->assertEquals(10, $g->point_calculation($p));
-    }**/
 
     /**
      * Fonction dans le cas où aucun lancer n'a encore été fait
@@ -600,7 +442,7 @@ class GameTest extends TestCase
     /**
      * Cas d'un strike dans un round intermédiaire
      * @return void
-     */
+    **/
     public function test__calculate_total_correct_simple(): void
     {
         $p = new Player("John Doe");

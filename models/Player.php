@@ -32,14 +32,21 @@ class Player
 
     /**
      * @return array Tableau contenant les points marqués par le joueur
-     */
+    **/
     public function get_scoreboard(): array
     {
         return $this->scoreboard;
     }
 
+    /**
+     * Permet de récupérer la valeur du premier lancer d'un round au choix
+     * @param int $r Numéro du round dont on veut le premier lancer
+     * @return int|null Valeur du lancer, NULL sinon
+    **/
     public function get_first_throw_score(int $r): ?int
     {
+        // Si le numéro du round n'est pas présent dans notre tableau
+        // des scores alors impossible de retourner une valeur de lancer
         if (!array_key_exists($r, $this->scoreboard))
         {
             return null;
@@ -48,8 +55,15 @@ class Player
         return $this->scoreboard[$r]->get_first_throw();
     }
 
+    /**
+     * Permet de récupérer la valeur du deuxième lancer d'un round au choix
+     * @param int $r Numéro du round dont on veut le deuxième lancer
+     * @return int|null Valeur du lancer, NULL sinon
+     **/
     public function get_second_throw_score(int $r): ?int
     {
+        // Si le numéro du round n'est pas présent dans notre tableau
+        // des scores alors impossible de retourner une valeur de lancer
         if (!array_key_exists($r, $this->scoreboard))
         {
             return null;
@@ -58,8 +72,15 @@ class Player
         return $this->scoreboard[$r]->get_second_throw();
     }
 
+    /**
+     * Permet de récupérer la valeur du troisième lancer d'un round au choix
+     * @param int $r Numéro du round dont on veut le troisième lancer
+     * @return int|null Valeur du lancer, NULL sinon
+     **/
     public function get_third_throw_score(int $r): ?int
     {
+        // Si le numéro du round n'est pas présent dans notre tableau
+        // des scores alors impossible de retourner une valeur de lancer
         if (!array_key_exists($r, $this->scoreboard))
         {
             return null;
