@@ -576,4 +576,50 @@ class GameTest extends TestCase
 
         $this->assertEquals(17, $g->total_score_for_player($p));
     }
+
+    public function test__calculate_total_strike_in_a_row(): void
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            self::NORMAL_NUMBER_OF_ROUNDS,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $g->save_throw(self::NORMAL_NUMBER_OF_PINS);
+        $g->next();
+
+        $g->save_throw(self::NORMAL_NUMBER_OF_PINS);
+        $g->next();
+
+        $g->save_throw(self::NORMAL_NUMBER_OF_PINS);
+        $g->next();
+
+        $g->save_throw(4);
+        $g->save_throw(3);
+
+        $g->next();
+
+        $this->assertEquals(78, $g->total_score_for_player($p));
+    }
+
+    /**
+     * Cas d'un strike sans round suivant complet
+    **/
+    public function test_calculate_strike_no_following_round(): void
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            10,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $g->save_throw(10);
+        $g->next();
+
+        $this->assertEquals(null, $g->total_score_for_player($p));
+    }
 }

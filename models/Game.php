@@ -11,7 +11,7 @@ class Game
     /**
      * @var int Numéro du round actuel
      *
-     * Le premier round est le round 1. 
+     * Le premier round est le round 1.
      * Le dernier round est le round $this->rounds.
      **/
     private int $current_round = 1;
@@ -142,7 +142,7 @@ class Game
 
         // Au premier lancer, on vérifie que la valeur du lancer soit inférieure ou égale au nombre de quilles
         // Au deuxième lancer, on vérifie que la valeur du lancer soit inférieure ou égale au nombre de quilles moins la valeur du premier lancer
-        
+
         if ($this->current_throw < 3) // Si on est au premier ou au deuxième lancer
         {
             if ($this->current_round != $this->rounds) // Si on n'est pas au dernier round
@@ -168,27 +168,27 @@ class Game
         } else // On est au troisième lancer
         {
             //Si le joueur a fait deux strikes dans le round courant
-            if($this->player_did_strike_in_round($player, $this->get_current_round()) && $player->get_second_throw_score($this->get_current_round() == $this->pins))
+            if ($this->player_did_strike_in_round($player, $this->get_current_round()) && $player->get_second_throw_score($this->get_current_round() == $this->pins))
             {
-                if($value_to_save > $this->pins)
+                if ($value_to_save > $this->pins)
                 {
                     throw new LogicException("La valeur du lancer doit être inférieure ou égale à " . $this->pins);
                 }
             }
 
             //Si le joueur a fait un strike dans le round courant
-            if($this->player_did_strike_in_round($player, $this->get_current_round()) && $player->get_second_throw_score($this->get_current_round() != $this->pins))
+            if ($this->player_did_strike_in_round($player, $this->get_current_round()) && $player->get_second_throw_score($this->get_current_round() != $this->pins))
             {
-                if($value_to_save > $this->pins - $player->get_second_throw_score($this->get_current_round()))
+                if ($value_to_save > $this->pins - $player->get_second_throw_score($this->get_current_round()))
                 {
                     throw new LogicException("La valeur du lancer doit être inférieure ou égale à " . ($this->pins - $player->get_second_throw_score($this->get_current_round())));
                 }
             }
 
             //Si le joueur a fait un spare dans le round courant
-            if($this->player_did_spare_in_round($player, $this->get_current_round()))
+            if ($this->player_did_spare_in_round($player, $this->get_current_round()))
             {
-                if($value_to_save > $this->pins)
+                if ($value_to_save > $this->pins)
                 {
                     throw new LogicException("La valeur du lancer doit être inférieure ou égale à " . $this->pins);
                 }
@@ -282,6 +282,15 @@ class Game
      **/
     public function next(): void
     {
+        // Si le joueur est le seul dans la partie
+        if (sizeof($this->players) === 1)
+        {
+            $this->current_round++;
+            $this->current_throw = 1;
+            $this->get_current_player()->new_round();
+            return;
+        }
+
         $this->current_player++;
 
         // Si le numéro du joueur est supérieur au nombre de joueurs total, on revient au joueur 0
@@ -290,15 +299,13 @@ class Game
             $this->current_player = 0;
             $this->current_round++;
             $this->current_throw = 1;
-
+        } else // Sinon, on passe simplement au round suivant
+        {
+            $this->current_throw = 1;
             foreach ($this->players as $player)
             {
                 $player->new_round();
             }
-
-        } else // Sinon, on passe simplement au round suivant
-        {
-            $this->current_throw = 1;
         }
     }
 
@@ -372,19 +379,21 @@ class Game
                 }
             } elseif ($this->player_did_spare_in_round($p, $round))
             {
-                if ($p->get_first_throw_score($round + 1) === null) { return null; }
-                else
+                if ($p->get_first_throw_score($round + 1) === null)
+                {
+                    return null;
+                } else
                 {
                     return $this->pins + $p->get_scoreboard()[$round + 1]->get_first_throw();
                 }
             } else
             {
-                if ($second_throw === null)
-                {
-                    return null;
-                } else
+                if ($second_throw !== null)
                 {
                     return $first_throw + $second_throw;
+                } else
+                {
+                    return null;
                 }
             }
         }
@@ -416,6 +425,7 @@ class Game
 
         return $total;
     }
+
     /**
      * Fonction permettant de retourner le(s) joueur(s) ayant le plus grand score
      * @return array Tableau à un élément si un seul joueur a le plus grand score, ou plusieurs si plusieurs joueurs ont le même score
