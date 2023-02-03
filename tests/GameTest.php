@@ -6,8 +6,8 @@ use PHPUnit\Framework\TestCase;
 class GameTest extends TestCase
 {
     private array $short_valid_list_players;
-    private const NORMAL_NUMBER_OF_ROUNDS   = 10;
-    private const NORMAL_NUMBER_OF_PINS     = 10;
+    const NORMAL_NUMBER_OF_ROUNDS = 10;
+    const NORMAL_NUMBER_OF_PINS = 10;
 
     public function __construct()
     {
@@ -106,11 +106,11 @@ class GameTest extends TestCase
 
         $game->save_throw(10);
         $game->save_throw(7);
-        $game->save_throw(8);
+        $game->save_throw(2);
 
         $this->assertEquals(10, $game->get_current_player()->get_first_throw_score(1));
         $this->assertEquals(7, $game->get_current_player()->get_second_throw_score(1));
-        $this->assertEquals(8, $game->get_current_player()->get_third_throw_score(1));
+        $this->assertEquals(2, $game->get_current_player()->get_third_throw_score(1));
     }
 
     public function test__save_throw_more_than_pins_3(): void
