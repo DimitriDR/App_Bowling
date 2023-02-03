@@ -11,8 +11,8 @@ class Game
     /**
      * @var int Numéro du round actuel
      *
-     * Le premier round est le round 1. Le dernier round est le round 10.
-     * Le round 11 est le round bonus : il est utilisé uniquement si le joueur fait un strike ou un spare au round 10
+     * Le premier round est le round 1. 
+     * Le dernier round est le round $this->rounds.
      **/
     private int $current_round = 1;
 
@@ -142,7 +142,7 @@ class Game
         // Au premier et deuxième lancer, on ne peut pas mettre un nombre de quilles tombées que ce qu'il reste
         if ($this->current_throw < 3)
         {
-            if ($this->current_round != $this->rounds)
+            if ($this->current_round != $this->rounds) // Si on n'est pas au dernier round
             {
                 if ($player->get_first_throw_score($this->get_current_round()) != $this->pins)
                 {

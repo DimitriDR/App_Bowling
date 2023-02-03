@@ -44,7 +44,7 @@ if ($game->get_current_round() < $game->get_rounds())
     }
 } else
 {
-    // Dans le dixième et dernier round
+    // Dans le dernier round
     // On a un cas particulier si le joueur a fait un spare
     if ($next_current_throw === 3)
     { // Si le prochain lancer est le troisième, on le passe si le joueur n'a fait ni un spare ni un strike
