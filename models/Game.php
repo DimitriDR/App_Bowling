@@ -164,6 +164,10 @@ class Game
             }
         } else // Au dernier round, on ne peut pas mettre le nombre que l'on veut sauf si l'on a fait un spare ou un strike
         {
+            if($this->current_throw == 3 && $value_to_save > $this->pins - $player->get_second_throw_score($this->get_current_round()))
+            {
+                throw new LogicException("La valeur du lancer doit être inférieure ou égale à " . $this->pins - $player->get_second_throw_score($this->get_current_round()));
+            }
             if (!($this->player_did_strike_in_round($player, $this->get_current_round())) && !($this->player_did_spare_in_round($player, $this->get_current_round())))
             {
                 throw new LogicException("La valeur du lancer doit être inférieure ou égale à " . ($this->pins - $player->get_first_throw_score($this->get_current_round())));
@@ -333,6 +337,10 @@ class Game
             // Si le joueur a fait un spare, on attend le premier lancer du round suivant pour calculer le score
             if ($this->player_did_strike_in_round($p, $round))
             {
+                if ($this->player_did_strike_in_round($p, $round + 1) && $round + 1 !== $this->rounds)
+                {
+                    return $this->pins + $this->pins + $p->get_first_throw_score($round + 2);
+                }
                 // Si le joueur a fait un strike, on attend le premier et le deuxième lancer du round suivant pour calculer le score
                 if ($p->get_first_throw_score($round + 1) === null || $p->get_second_throw_score($round + 1) === null)
                 {
