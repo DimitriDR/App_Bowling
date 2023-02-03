@@ -387,4 +387,29 @@ class Game
 
         return $total;
     }
+    /**
+     * Fonction permettant de retourner le(s) joueur(s) ayant le plus grand score
+     * @return array Tableau à un élément si un seul joueur a le plus grand score, ou plusieurs si plusieurs joueurs ont le même score
+     */
+    public function calculate_winner(): array
+    {
+        $winners = [];
+        $max_score = 0;
+
+        foreach ($this->players as $player)
+        {
+            $score = $this->total_score_for_player($player);
+
+            if ($score > $max_score)
+            {
+                $max_score = $score;
+                $winners = [$player];
+            } elseif ($score === $max_score)
+            {
+                $winners[] = $player;
+            }
+        }
+        return $winners;
+    }
+
 }
