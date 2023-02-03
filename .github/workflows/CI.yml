@@ -1,5 +1,5 @@
 name:
-  CI
+  Intégration continue du projet
 
 # Quand cette action sera déclenchée ?
 on:
@@ -14,15 +14,24 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Initialisation de PHP 8.1.x
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          tools: composer, phpunit
-          extensions: mbstring, PDO, grpc, tokenizer, xml, json, ctype, fileinfo, openssl, bcmath
+      - name: Installation PHP
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y php
+          php --version
 
-      - name: Exécution de PHPUnit
-        run: phpunit ${GITHUB_WORKSPACE}/tests/
+      - name: Installation de PHPUnit
+        run: |
+          wget https://phar.phpunit.de/phpunit.phar
+          chmod +x phpunit.phar
+          sudo mv phpunit.phar /usr/local/bin/phpunit
+
+      - name: Exécution des tests PHPUnit
+        run: |
+          cd tests
+          phpunit --debug .
