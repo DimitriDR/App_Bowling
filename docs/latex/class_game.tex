@@ -1,0 +1,209 @@
+\hypertarget{class_game}{}\doxysection{Référence de la classe Game}
+\label{class_game}\index{Game@{Game}}
+\doxysubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_game_afed39222839adf21ad74ab1f701b915a}{\+\_\+\+\_\+construct}} (array \$players, int \$rounds, int \$pin\+\_\+number)
+\item 
+\mbox{\hyperlink{class_game_aaab3794b1183aca8afefab8af8c80a88}{get\+\_\+rounds}} ()
+\item 
+\mbox{\hyperlink{class_game_a170fafcd1773ef1b40e9c12a4e747cc6}{get\+\_\+players}} ()
+\item 
+\mbox{\hyperlink{class_game_aeeb081448c91d5076d3addb663df1fe2}{get\+\_\+current\+\_\+throw}} ()
+\item 
+\mbox{\hyperlink{class_game_a37269d650e1ed389472ab6d45d2692ab}{get\+\_\+current\+\_\+round}} ()
+\item 
+\mbox{\hyperlink{class_game_a251f0c8803de71f54d24df7511289bec}{get\+\_\+current\+\_\+player}} ()
+\item 
+\mbox{\hyperlink{class_game_aeeed2ff7f2dc75da97304f96cd910531}{get\+\_\+pins}} ()
+\item 
+\mbox{\hyperlink{class_game_ab2096ebfb7da4d99fec1267646ff127e}{save\+\_\+throw}} (int \$value\+\_\+to\+\_\+save)
+\item 
+\mbox{\hyperlink{class_game_a0caf280aacb2fbe2e1eb079bb0148388}{current\+\_\+player\+\_\+did\+\_\+spare}} ()
+\item 
+\mbox{\hyperlink{class_game_a01cf2788fd3af406fc42255743f468d1}{current\+\_\+player\+\_\+did\+\_\+strike}} ()
+\item 
+\mbox{\hyperlink{class_game_aad59106625bd351736ce36d0fc15526c}{next}} ()
+\item 
+\mbox{\hyperlink{class_game_a08259282925433ea40f8458264d14c5e}{calculate\+\_\+score\+\_\+in\+\_\+round\+\_\+for\+\_\+player}} (\mbox{\hyperlink{class_player}{Player}} \$p, int \$round)
+\item 
+\mbox{\hyperlink{class_game_a1a26eee40bef209b4e39a64295685f1e}{total\+\_\+score\+\_\+for\+\_\+player}} (\mbox{\hyperlink{class_player}{Player}} \$p)
+\item 
+\mbox{\hyperlink{class_game_a27d9e26f404468a5586eb68090f3e1ec}{calculate\+\_\+winner}} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Documentation des constructeurs et destructeur}
+\mbox{\Hypertarget{class_game_afed39222839adf21ad74ab1f701b915a}\label{class_game_afed39222839adf21ad74ab1f701b915a}} 
+\index{Game@{Game}!\_\_construct@{\_\_construct}}
+\index{\_\_construct@{\_\_construct}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{\_\_construct()}{\_\_construct()}}
+{\footnotesize\ttfamily Game\+::\+\_\+\+\_\+construct (\begin{DoxyParamCaption}\item[{array}]{\$players,  }\item[{int}]{\$rounds,  }\item[{int}]{\$pin\+\_\+number }\end{DoxyParamCaption})}
+
+Constructeur permettant d\textquotesingle{}intégrer directement une liste de joueurs et de définir le nombre de tours et de quilles
+
+
+\begin{DoxyParams}[1]{Paramètres}
+array & {\em \$players} & Liste des joueurs présents dans la partie \\
+\hline
+int & {\em \$rounds} & Nombre de tours de la partie choisi par le joueur \\
+\hline
+int & {\em \$pin\+\_\+number} & Nombre de quilles dans le jeu choisi par le joueur \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Invalid\+Argument\+Exception} & Si un des joueurs n\textquotesingle{}est pas une instance de la classe \mbox{\hyperlink{class_player}{Player}} \\
+\hline
+\end{DoxyExceptions}
+
+
+\doxysubsection{Documentation des fonctions membres}
+\mbox{\Hypertarget{class_game_a08259282925433ea40f8458264d14c5e}\label{class_game_a08259282925433ea40f8458264d14c5e}} 
+\index{Game@{Game}!calculate\_score\_in\_round\_for\_player@{calculate\_score\_in\_round\_for\_player}}
+\index{calculate\_score\_in\_round\_for\_player@{calculate\_score\_in\_round\_for\_player}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{calculate\_score\_in\_round\_for\_player()}{calculate\_score\_in\_round\_for\_player()}}
+{\footnotesize\ttfamily Game\+::calculate\+\_\+score\+\_\+in\+\_\+round\+\_\+for\+\_\+player (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_player}{Player}}}]{\$p,  }\item[{int}]{\$round }\end{DoxyParamCaption})}
+
+Fonction pour calculer le score d\textquotesingle{}un joueur dans un round donné.
+
+
+\begin{DoxyParams}[1]{Paramètres}
+\mbox{\hyperlink{class_player}{Player}} & {\em \$p} & Joueur dont on veut calculer le score \\
+\hline
+int & {\em \$round} & \mbox{\hyperlink{class_round}{Round}} dans lequel on veut calculer le score \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int$\vert$null Score du joueur dans le round donné, ou null si le joueur n\textquotesingle{}a pas encore joué ce round 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_game_a27d9e26f404468a5586eb68090f3e1ec}\label{class_game_a27d9e26f404468a5586eb68090f3e1ec}} 
+\index{Game@{Game}!calculate\_winner@{calculate\_winner}}
+\index{calculate\_winner@{calculate\_winner}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{calculate\_winner()}{calculate\_winner()}}
+{\footnotesize\ttfamily Game\+::calculate\+\_\+winner (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Fonction permettant de retourner le(s) joueur(s) ayant le plus grand score \begin{DoxyReturn}{Renvoie}
+array Tableau à un élément si un seul joueur a le plus grand score, ou plusieurs si plusieurs joueurs ont le même score 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_game_a0caf280aacb2fbe2e1eb079bb0148388}\label{class_game_a0caf280aacb2fbe2e1eb079bb0148388}} 
+\index{Game@{Game}!current\_player\_did\_spare@{current\_player\_did\_spare}}
+\index{current\_player\_did\_spare@{current\_player\_did\_spare}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{current\_player\_did\_spare()}{current\_player\_did\_spare()}}
+{\footnotesize\ttfamily Game\+::current\+\_\+player\+\_\+did\+\_\+spare (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Fonction permettant de savoir si le joueur courant a fait un spare dans le round courant. \begin{DoxyReturn}{Renvoie}
+bool Vrai si le joueur a fait un spare, faux sinon. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_game_a01cf2788fd3af406fc42255743f468d1}\label{class_game_a01cf2788fd3af406fc42255743f468d1}} 
+\index{Game@{Game}!current\_player\_did\_strike@{current\_player\_did\_strike}}
+\index{current\_player\_did\_strike@{current\_player\_did\_strike}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{current\_player\_did\_strike()}{current\_player\_did\_strike()}}
+{\footnotesize\ttfamily Game\+::current\+\_\+player\+\_\+did\+\_\+strike (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Fonction permettant de savoir si le joueur courant a fait un strike dans le round courant. \begin{DoxyReturn}{Renvoie}
+bool Vrai si le joueur a fait un strike, faux sinon. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_game_a251f0c8803de71f54d24df7511289bec}\label{class_game_a251f0c8803de71f54d24df7511289bec}} 
+\index{Game@{Game}!get\_current\_player@{get\_current\_player}}
+\index{get\_current\_player@{get\_current\_player}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{get\_current\_player()}{get\_current\_player()}}
+{\footnotesize\ttfamily Game\+::get\+\_\+current\+\_\+player (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Accesseur particulier permettant de récupérer le joueur courant sous sa forme objet \begin{DoxyReturn}{Renvoie}
+\mbox{\hyperlink{class_player}{Player}} Joueur courant 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_game_a37269d650e1ed389472ab6d45d2692ab}\label{class_game_a37269d650e1ed389472ab6d45d2692ab}} 
+\index{Game@{Game}!get\_current\_round@{get\_current\_round}}
+\index{get\_current\_round@{get\_current\_round}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{get\_current\_round()}{get\_current\_round()}}
+{\footnotesize\ttfamily Game\+::get\+\_\+current\+\_\+round (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Accesseur pour récupérer le numéro du round dans lequel on est \begin{DoxyReturn}{Renvoie}
+int Numéro du round 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_game_aeeb081448c91d5076d3addb663df1fe2}\label{class_game_aeeb081448c91d5076d3addb663df1fe2}} 
+\index{Game@{Game}!get\_current\_throw@{get\_current\_throw}}
+\index{get\_current\_throw@{get\_current\_throw}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{get\_current\_throw()}{get\_current\_throw()}}
+{\footnotesize\ttfamily Game\+::get\+\_\+current\+\_\+throw (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Accesseur pour récupérer le lancer sur lequel on est \begin{DoxyReturn}{Renvoie}
+int Numéro du lancer 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_game_aeeed2ff7f2dc75da97304f96cd910531}\label{class_game_aeeed2ff7f2dc75da97304f96cd910531}} 
+\index{Game@{Game}!get\_pins@{get\_pins}}
+\index{get\_pins@{get\_pins}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{get\_pins()}{get\_pins()}}
+{\footnotesize\ttfamily Game\+::get\+\_\+pins (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Accesseur pour récupérer le nombre de quilles \begin{DoxyReturn}{Renvoie}
+int Nombre de quilles 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_game_a170fafcd1773ef1b40e9c12a4e747cc6}\label{class_game_a170fafcd1773ef1b40e9c12a4e747cc6}} 
+\index{Game@{Game}!get\_players@{get\_players}}
+\index{get\_players@{get\_players}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{get\_players()}{get\_players()}}
+{\footnotesize\ttfamily Game\+::get\+\_\+players (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Accesseur tableau des joueurs \begin{DoxyReturn}{Renvoie}
+array Tableau des joueurs 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_game_aaab3794b1183aca8afefab8af8c80a88}\label{class_game_aaab3794b1183aca8afefab8af8c80a88}} 
+\index{Game@{Game}!get\_rounds@{get\_rounds}}
+\index{get\_rounds@{get\_rounds}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{get\_rounds()}{get\_rounds()}}
+{\footnotesize\ttfamily Game\+::get\+\_\+rounds (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Accesseur permettant de récupérer le nombre de tours de la partie \begin{DoxyReturn}{Renvoie}
+int Nombre de tours de la partie 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_game_aad59106625bd351736ce36d0fc15526c}\label{class_game_aad59106625bd351736ce36d0fc15526c}} 
+\index{Game@{Game}!next@{next}}
+\index{next@{next}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{next()}{next()}}
+{\footnotesize\ttfamily Game\+::next (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Fonction permettant de gérer automatiquement le passage, soit au joueur suivant, soit au round suivant selon le cas. Elle incrémente d\textquotesingle{}un round quand tous les joueurs ont joué le round en question. Sinon, elle donne la main au joueur suivant en incrémentant la variable du joueur courant. \begin{DoxyReturn}{Renvoie}
+void 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_game_ab2096ebfb7da4d99fec1267646ff127e}\label{class_game_ab2096ebfb7da4d99fec1267646ff127e}} 
+\index{Game@{Game}!save\_throw@{save\_throw}}
+\index{save\_throw@{save\_throw}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{save\_throw()}{save\_throw()}}
+{\footnotesize\ttfamily Game\+::save\+\_\+throw (\begin{DoxyParamCaption}\item[{int}]{\$value\+\_\+to\+\_\+save }\end{DoxyParamCaption})}
+
+Fonction permettant d\textquotesingle{}enregistrer la valeur du lancer dans le joueur actuel et le round actuel
+
+
+\begin{DoxyParams}[1]{Paramètres}
+int & {\em \$value\+\_\+to\+\_\+save} & Valeur du lancer (entre 0 et MAX\+\_\+\+PIN) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+void 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em Invalid\+Argument\+Exception} & Si la valeur du lancer est strictement inférieure à 0 ou supérieure à MAX\+\_\+\+PIN \\
+\hline
+\end{DoxyExceptions}
+\mbox{\Hypertarget{class_game_a1a26eee40bef209b4e39a64295685f1e}\label{class_game_a1a26eee40bef209b4e39a64295685f1e}} 
+\index{Game@{Game}!total\_score\_for\_player@{total\_score\_for\_player}}
+\index{total\_score\_for\_player@{total\_score\_for\_player}!Game@{Game}}
+\doxysubsubsection{\texorpdfstring{total\_score\_for\_player()}{total\_score\_for\_player()}}
+{\footnotesize\ttfamily Game\+::total\+\_\+score\+\_\+for\+\_\+player (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{class_player}{Player}}}]{\$p }\end{DoxyParamCaption})}
+
+Fonction permettant de calculer le score total d\textquotesingle{}un joueur 
+\begin{DoxyParams}[1]{Paramètres}
+\mbox{\hyperlink{class_player}{Player}} & {\em \$p} & Joueur dont on veut calculer le score \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int$\vert$null Score total du joueur, ou null si l\textquotesingle{}on n\textquotesingle{}est pas en capacité de calculer le score (par exemple, si le joueur n\textquotesingle{}a pas fait le deuxième lancer, en attente du suivant, etc.). 
+\end{DoxyReturn}
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+models/\mbox{\hyperlink{_game_8php}{Game.\+php}}\end{DoxyCompactItemize}

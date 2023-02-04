@@ -1,0 +1,113 @@
+\hypertarget{class_player}{}\doxysection{Référence de la classe Player}
+\label{class_player}\index{Player@{Player}}
+\doxysubsection*{Fonctions membres publiques}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_player_ad23a012f738f455fe7470f34dc533fbc}{\+\_\+\+\_\+construct}} (string \$name)
+\item 
+\mbox{\hyperlink{class_player_a6cdb7e5d3d5f376063785ff58f04af5b}{get\+\_\+scoreboard}} ()
+\item 
+\mbox{\hyperlink{class_player_ad235066e683f4c44606789d0df910607}{get\+\_\+first\+\_\+throw\+\_\+score}} (int \$r)
+\item 
+\mbox{\hyperlink{class_player_ac275b693aaf8a0d4d838ac928ae2c1b2}{get\+\_\+second\+\_\+throw\+\_\+score}} (int \$r)
+\item 
+\mbox{\hyperlink{class_player_aa563c75dbad343580f5b78c0ac30e31c}{get\+\_\+third\+\_\+throw\+\_\+score}} (int \$r)
+\item 
+\mbox{\hyperlink{class_player_a5618b9cb132cfb786ae67de2551755d3}{new\+\_\+round}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Attributs publics}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{class_player_a73ff38332370a2a341b08886d7a1aa1e}{\$name}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Documentation des constructeurs et destructeur}
+\mbox{\Hypertarget{class_player_ad23a012f738f455fe7470f34dc533fbc}\label{class_player_ad23a012f738f455fe7470f34dc533fbc}} 
+\index{Player@{Player}!\_\_construct@{\_\_construct}}
+\index{\_\_construct@{\_\_construct}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\_\_construct()}{\_\_construct()}}
+{\footnotesize\ttfamily Player\+::\+\_\+\+\_\+construct (\begin{DoxyParamCaption}\item[{string}]{\$name }\end{DoxyParamCaption})}
+
+Constructeur de la classe \mbox{\hyperlink{class_player}{Player}} 
+\begin{DoxyParams}[1]{Paramètres}
+string & {\em \$name} & Nom du joueur \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Documentation des fonctions membres}
+\mbox{\Hypertarget{class_player_ad235066e683f4c44606789d0df910607}\label{class_player_ad235066e683f4c44606789d0df910607}} 
+\index{Player@{Player}!get\_first\_throw\_score@{get\_first\_throw\_score}}
+\index{get\_first\_throw\_score@{get\_first\_throw\_score}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{get\_first\_throw\_score()}{get\_first\_throw\_score()}}
+{\footnotesize\ttfamily Player\+::get\+\_\+first\+\_\+throw\+\_\+score (\begin{DoxyParamCaption}\item[{int}]{\$r }\end{DoxyParamCaption})}
+
+Permet de récupérer la valeur du premier lancer d\textquotesingle{}un round au choix 
+\begin{DoxyParams}[1]{Paramètres}
+int & {\em \$r} & Numéro du round dont on veut le premier lancer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int$\vert$null Valeur du lancer, NULL sinon 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_player_a6cdb7e5d3d5f376063785ff58f04af5b}\label{class_player_a6cdb7e5d3d5f376063785ff58f04af5b}} 
+\index{Player@{Player}!get\_scoreboard@{get\_scoreboard}}
+\index{get\_scoreboard@{get\_scoreboard}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{get\_scoreboard()}{get\_scoreboard()}}
+{\footnotesize\ttfamily Player\+::get\+\_\+scoreboard (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyReturn}{Renvoie}
+array Tableau contenant les points marqués par le joueur 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_player_ac275b693aaf8a0d4d838ac928ae2c1b2}\label{class_player_ac275b693aaf8a0d4d838ac928ae2c1b2}} 
+\index{Player@{Player}!get\_second\_throw\_score@{get\_second\_throw\_score}}
+\index{get\_second\_throw\_score@{get\_second\_throw\_score}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{get\_second\_throw\_score()}{get\_second\_throw\_score()}}
+{\footnotesize\ttfamily Player\+::get\+\_\+second\+\_\+throw\+\_\+score (\begin{DoxyParamCaption}\item[{int}]{\$r }\end{DoxyParamCaption})}
+
+Permet de récupérer la valeur du deuxième lancer d\textquotesingle{}un round au choix 
+\begin{DoxyParams}[1]{Paramètres}
+int & {\em \$r} & Numéro du round dont on veut le deuxième lancer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int$\vert$null Valeur du lancer, NULL sinon 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_player_aa563c75dbad343580f5b78c0ac30e31c}\label{class_player_aa563c75dbad343580f5b78c0ac30e31c}} 
+\index{Player@{Player}!get\_third\_throw\_score@{get\_third\_throw\_score}}
+\index{get\_third\_throw\_score@{get\_third\_throw\_score}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{get\_third\_throw\_score()}{get\_third\_throw\_score()}}
+{\footnotesize\ttfamily Player\+::get\+\_\+third\+\_\+throw\+\_\+score (\begin{DoxyParamCaption}\item[{int}]{\$r }\end{DoxyParamCaption})}
+
+Permet de récupérer la valeur du troisième lancer d\textquotesingle{}un round au choix 
+\begin{DoxyParams}[1]{Paramètres}
+int & {\em \$r} & Numéro du round dont on veut le troisième lancer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Renvoie}
+int$\vert$null Valeur du lancer, NULL sinon 
+\end{DoxyReturn}
+\mbox{\Hypertarget{class_player_a5618b9cb132cfb786ae67de2551755d3}\label{class_player_a5618b9cb132cfb786ae67de2551755d3}} 
+\index{Player@{Player}!new\_round@{new\_round}}
+\index{new\_round@{new\_round}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{new\_round()}{new\_round()}}
+{\footnotesize\ttfamily Player\+::new\+\_\+round (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Fonction permettant d\textquotesingle{}ajouter un nouveau round au tableau des scores \begin{DoxyReturn}{Renvoie}
+void 
+\end{DoxyReturn}
+
+
+\doxysubsection{Documentation des données membres}
+\mbox{\Hypertarget{class_player_a73ff38332370a2a341b08886d7a1aa1e}\label{class_player_a73ff38332370a2a341b08886d7a1aa1e}} 
+\index{Player@{Player}!\$name@{\$name}}
+\index{\$name@{\$name}!Player@{Player}}
+\doxysubsubsection{\texorpdfstring{\$name}{$name}}
+{\footnotesize\ttfamily string Player\+::\$name}
+
+
+
+La documentation de cette classe a été générée à partir du fichier suivant \+:\begin{DoxyCompactItemize}
+\item 
+models/\mbox{\hyperlink{_player_8php}{Player.\+php}}\end{DoxyCompactItemize}
