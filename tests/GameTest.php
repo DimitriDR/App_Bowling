@@ -607,7 +607,7 @@ class GameTest extends TestCase
     /**
      * Cas d'un strike sans round suivant complet
     **/
-    public function test_calculate_strike_no_following_round(): void
+    public function test__calculate_strike_no_following_round(): void
     {
         $p = new Player("John Doe");
 
@@ -621,5 +621,22 @@ class GameTest extends TestCase
         $g->next();
 
         $this->assertEquals(null, $g->total_score_for_player($p));
+    }
+
+    public function test__calculate_strike_in_a_row_last_round(): void
+    {
+        $p = new Player("John Doe");
+
+        $g = new Game(
+            [$p],
+            1,
+            self::NORMAL_NUMBER_OF_PINS
+        );
+
+        $g->save_throw(10);
+        $g->save_throw(10);
+        $g->save_throw(10);
+
+        $this->assertEquals(30, $g->total_score_for_player($p));
     }
 }

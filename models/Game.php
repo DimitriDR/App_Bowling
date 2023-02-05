@@ -167,7 +167,7 @@ class Game
             }
         } else // On est au troisième lancer
         {
-            //Si le joueur a fait deux strikes dans le round courant
+            // Si le joueur a fait deux strikes dans le round courant
             if ($this->player_did_strike_in_round($player, $this->get_current_round()) && $player->get_second_throw_score($this->get_current_round() == $this->pins))
             {
                 if ($value_to_save > $this->pins)
@@ -177,7 +177,7 @@ class Game
             }
 
             //Si le joueur a fait un strike dans le round courant
-            if ($this->player_did_strike_in_round($player, $this->get_current_round()) && $player->get_second_throw_score($this->get_current_round() != $this->pins))
+            if ($this->player_did_strike_in_round($player, $this->get_current_round()) && $player->get_second_throw_score($this->get_current_round()) != $this->pins)
             {
                 if ($value_to_save > $this->pins - $player->get_second_throw_score($this->get_current_round()))
                 {
@@ -185,7 +185,7 @@ class Game
                 }
             }
 
-            //Si le joueur a fait un spare dans le round courant
+            // Si le joueur a fait un spare dans le round courant
             if ($this->player_did_spare_in_round($player, $this->get_current_round()))
             {
                 if ($value_to_save > $this->pins)
@@ -196,7 +196,7 @@ class Game
 
         }
 
-        // dans le tableau des points marqués grâce à la fonction intégrée
+        // Dans le tableau des points marqués grâce à la fonction intégrée
         $player->save_throw_value($value_to_save, $this->get_current_round(), $this->current_throw);
 
         $this->current_throw++;
